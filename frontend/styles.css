@@ -1,0 +1,114 @@
+
+        .topbar{
+            display:grid;
+            grid-template-columns: repeat(7, max-content)  repeat(3, max-content); 
+            gap: 20px;
+            height: 80px;
+            align-items: center;
+            border-bottom: 2px solid black ;
+            margin-bottom: 30px;
+        }
+        .Buttons{
+            height:45px;
+            width:50px;
+            align-items: center;
+            border:none;
+            background-color:transparent;
+        }
+        .logo{
+            font-size: 35px;
+            font-weight: bold;
+            margin-left:10px;
+            margin-right:10px;
+        }
+        .interests{
+            
+            margin-top:10px;
+            margin-bottom:10px;
+            font-size: 20px;
+            border:none;
+            background-color: transparent;
+        }  
+        button:hover{
+            background-color: lightgray;
+            cursor: pointer;
+        }
+        .newsletter{
+            height:25px;
+            width:120px;
+            margin-top:10px;
+            margin-bottom:10px;
+            font-size: 15px;
+            border:none;
+            background-color: transparent;
+            
+        }
+        .search-bar{
+            height:30px;
+            width:100%;
+            display: flex;
+            align-items: center;
+         }
+        .profile{
+            height:50px;
+            width:50px;
+            border:none;
+            background-color: transparent;
+           
+        }
+        .container {
+            height:600px;
+            width:1000px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            border-color: black; 
+            justify-self: center;
+        }
+        .picture{
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            height:300px;
+            width:300px;
+            border: 2px solid black;
+        }
+        .picture img{
+            height:100%;
+            width:100%;
+        }
+       .item{
+        display:grid;
+        grid-template-columns: 1fr 2fr;
+            border: 2px solid black;
+       }
+       .title{
+            margin-top: 20px;
+            margin-left: 20px;
+            font-size: 25px;
+            font-weight: bold;
+            
+       }
+       .read,.Author{
+            margin-top: 10px;
+            font-size:small;
+            color:grey;
+       }
+       .summary{
+        display:grid;
+        grid-template-rows: auto auto;
+            margin-top: 10px;
+            line-height:1.5;
+            font-size: large;
+            font-weight: normal;
+            display:inline-block;
+       }
+       .date,.category{
+        display:inline;
+        font-size:medium;
+        color:grey;
+        
+       }
+       .category{
+        margin-left: 10px;
+       }

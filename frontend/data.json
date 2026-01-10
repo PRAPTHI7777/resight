@@ -1,0 +1,18 @@
+[
+    {
+      "id": 1,
+      "title": "Agent Drift: Quantifying Behavioral Degradation in Multi-Agent LLM Systems Over Extended Interactions",
+      "Authors": "Yuntao Bai, Yao Fu, Yuxin Wang, Yizhou Zhang, Rui Zhang",
+      "desc": "Multi-agent Large Language Model (LLM) systems have emerged as powerful architectures for complex task decomposition and collaborative problem-solving. However, their long-term behavioral stability remains largely unexamined. This study introduces the concept of agent drift—the progressive degradation of agent behavior, decision quality, and inter-agent coherence over extended interaction sequences.We present a comprehensive theoretical framework for....",
+      "Category": "Machine Learning"
+    },
+        
+    {
+      "id": 2,
+      "title": "Agent Drift: Quantifying Behavioral Degradation in Multi-Agent LLM Systems Over Extended Interactions",
+      "Authors": "Yuntao Bai, Yao Fu, Yuxin Wang, Yizhou Zhang, Rui Zhang",
+      "desc": "Multi-agent Large Language Model (LLM) systems have emerged as powerful architectures for complex task decomposition and collaborative problem-solving. However, their long-term behavioral stability remains largely unexamined. This study introduces the concept of agent drift—the progressive degradation of agent behavior, decision quality, and inter-agent coherence over extended interaction sequences.We present a comprehensive theoretical framework for....",
+      "Category": "Machine Learning"
+    }
+
+]
