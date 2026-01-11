@@ -53,62 +53,53 @@
             height:50px;
             width:50px;
             border:none;
-            background-color: transparent;
-           
+            background-color: transparent;  
         }
         .container {
-            height:600px;
+            height:350px;
             width:1000px;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            border-color: black; 
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            padding: 20px;
             justify-self: center;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.253);
+            margin:25px;
+        }
+        .verticalcontain{
+            display: flex;
+            gap:10px;
+            width:635px;
+            flex-direction: column;
         }
         .picture{
-            margin-left: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
             height:300px;
             width:300px;
-            border: 2px solid black;
+            background-color: lightgray;
         }
-        .picture img{
-            height:100%;
+        .title{
+            height:75px;
+            font-size: 25px;
             width:100%;
         }
-       .item{
-        display:grid;
-        grid-template-columns: 1fr 2fr;
-            border: 2px solid black;
-       }
-       .title{
-            margin-top: 20px;
-            margin-left: 20px;
-            font-size: 25px;
-            font-weight: bold;
-            
-       }
-       .read,.Author{
-            margin-top: 10px;
-            font-size:small;
-            color:grey;
-       }
-       .summary{
-        display:grid;
-        grid-template-rows: auto auto;
-            margin-top: 10px;
-            line-height:1.5;
-            font-size: large;
-            font-weight: normal;
-            display:inline-block;
-       }
-       .date,.category{
-        display:inline;
-        font-size:medium;
-        color:grey;
-        
-       }
-       .category{
-        margin-left: 10px;
-       }
+        .authors{
+            height:30px;
+            width:100%;
+            font-size: 18px;
+            color: gray;
+        }
+        .summary{
+            height:170px;
+            width:100%;
+            font-size: 20px;
+        }
+        .date{
+            height:20px;
+            width:100%;
+            font-size: 15px;
+            color: gray;
+        }
+        .category{
+            height:20px;
+            width:100%;
+        }

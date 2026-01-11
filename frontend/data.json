@@ -1,18 +1,51 @@
 [
-    {
-      "id": 1,
-      "title": "Agent Drift: Quantifying Behavioral Degradation in Multi-Agent LLM Systems Over Extended Interactions",
-      "Authors": "Yuntao Bai, Yao Fu, Yuxin Wang, Yizhou Zhang, Rui Zhang",
-      "desc": "Multi-agent Large Language Model (LLM) systems have emerged as powerful architectures for complex task decomposition and collaborative problem-solving. However, their long-term behavioral stability remains largely unexamined. This study introduces the concept of agent drift—the progressive degradation of agent behavior, decision quality, and inter-agent coherence over extended interaction sequences.We present a comprehensive theoretical framework for....",
-      "Category": "Machine Learning"
-    },
-        
-    {
-      "id": 2,
-      "title": "Agent Drift: Quantifying Behavioral Degradation in Multi-Agent LLM Systems Over Extended Interactions",
-      "Authors": "Yuntao Bai, Yao Fu, Yuxin Wang, Yizhou Zhang, Rui Zhang",
-      "desc": "Multi-agent Large Language Model (LLM) systems have emerged as powerful architectures for complex task decomposition and collaborative problem-solving. However, their long-term behavioral stability remains largely unexamined. This study introduces the concept of agent drift—the progressive degradation of agent behavior, decision quality, and inter-agent coherence over extended interaction sequences.We present a comprehensive theoretical framework for....",
-      "Category": "Machine Learning"
-    }
-
+  {
+    "title": "Low-Power LoRaWAN Mesh Networks",
+    "description": "Optimizing packet routing protocols for battery-operated sensors in remote agricultural monitoring.",
+    "authors": ["Amina Okoro"],
+    "date": "2025-08-19",
+    "category": "IoT"
+  },
+  {
+    "title": "Neuromorphic Computing Architectures",
+    "description": "Comparative analysis of spikes-based processing versus traditional Von Neumann architectures for edge devices.",
+    "authors": ["Dr. Hans Mueller", "Elena Rossi"],
+    "date": "2025-12-01",
+    "category": "Hardware"
+  },
+  {
+    "title": "Zero-Knowledge Proofs in Supply Chains",
+    "description": "Utilizing ZK-Snarks to verify origin authenticity without compromising proprietary vendor data.",
+    "authors": ["Samir Bansal"],
+    "date": "2026-01-03",
+    "category": "Blockchain"
+  },
+  {
+    "title": "Natural Language Processing for Dead Languages",
+    "description": "Using transformer models to reconstruct and translate fragmented inscriptions from ancient Sumerian texts.",
+    "authors": ["Dr. Clara Oswald", "Miguel Hernandez"],
+    "date": "2025-11-20",
+    "category": "NLP"
+  },
+  {
+    "title": "Autonomous Drone Swarm Coordination",
+    "description": "Implementing decentralized flocking algorithms for rapid search and rescue operations in disaster zones.",
+    "authors": ["Sarah Jenkins", "Tariq Ali"],
+    "date": "2025-09-15",
+    "category": "Robotics"
+  },
+  {
+    "title": "Advancements in Solid-State Battery Tech",
+    "description": "Research into ceramic electrolytes to increase energy density and safety in electric vehicle power cells.",
+    "authors": ["Dr. Fiona Gallagher"],
+    "date": "2025-07-08",
+    "category": "Energy Tech"
+  },
+  {
+    "title": "Human-in-the-Loop Content Moderation",
+    "description": "Examining the psychological impact and efficiency of hybrid AI-human moderation systems for social platforms.",
+    "authors": ["Kevin Park", "Laura Vance"],
+    "date": "2025-10-10",
+    "category": "Human-Computer Interaction"
+  }
 ]
