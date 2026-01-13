@@ -1,7 +1,6 @@
 //Fetch data from local JSON file and render it to HTML document by using Vanilla JavaScript
-alert('JavaScript is linked successfully!'); 
 const container=document.querySelector('.contain');
-fetch('./data.json')
+fetch('http://127.0.0.1:8000/articles')
     .then(response => response.json())
     .then(data => {
         renderCharacters(data);
