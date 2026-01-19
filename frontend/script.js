@@ -1,12 +1,22 @@
 //Fetch data from local JSON file and render it to HTML document by using Vanilla JavaScript
 const container=document.querySelector('.contain');
-fetch('http://127.0.0.1:8000/articles')
-    .then(response => response.json())
+console.log("Script loaded");
+
+document.getElementById("categories").addEventListener("change",(e)=>{
+    const category=e.target.value;
+    let url="http://127.0.0.1:8000/articles";
+    if(category!="All"){
+        url=`http://127.0.0.1:8000/articles/search?category=${category}`;
+
+}
+fetch(url)
+    .then(res => res.json())
     .then(data => {
+        console.log("Fetched Data:", data);
         renderCharacters(data);
     })
     .catch(error => console.error('Error fetching data:', error));
-
+});
 
 function renderCharacters(data){
     container.innerHTML='';

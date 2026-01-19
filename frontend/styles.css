@@ -55,6 +55,13 @@
             border:none;
             background-color: transparent;  
         }
+        .dropdown{
+            border:none;
+            border-radius:5px;
+            display:inline;
+
+        }
+        
         .container {
             height:350px;
             width:1000px;
