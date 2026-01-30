@@ -6,7 +6,7 @@ document.getElementById("categories").addEventListener("change",(e)=>{
     const category=e.target.value;
     let url="http://127.0.0.1:8000/articles";
     if(category!="All"){
-        url=`http://127.0.0.1:8000/articles/search?category=${category}`;
+        url=`http://127.0.0.1:8000/articles/category/${category}`;
 
 }
 fetch(url)
