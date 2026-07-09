@@ -19,7 +19,7 @@
        </div>
      <div class="dropdown">
     <label for="categories">Filter by categories:</label>
-    <select id="categories" onchange="onCategoryClick(this.value)">
+    <select id="categoryselect" onchange="onCategoryClick(this.value); sessionStorage.setItem('category', this.value);">
     
     <option value="All">All</option>
     <option value="Energy Tech">Energy Tech</option>
@@ -29,9 +29,7 @@
     <option value="Cybersecurity">Cybersecurity</option>
     <option value="Quantum Computing">Quantum Computing</option>
     </select>
-    </div>
-
-       
+    </div> 
        <div class="contain">
        <div class="container">
         <div class="picture"></div>

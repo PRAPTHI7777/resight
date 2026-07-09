@@ -6,6 +6,7 @@ import models
 from database import engine
 import articles
 import psycopg2
+import auth
 
 app = FastAPI()
 
@@ -30,3 +31,5 @@ app.include_router(articles.router)
 @app.get("/")
 def root():
     return {"message":"Welcome to the Articles API"}
+
+app.include_router(auth.router)
