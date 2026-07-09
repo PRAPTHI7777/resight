@@ -11,3 +11,12 @@ class Article(Base):
     date= Column(String, nullable=False)
     category= Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class User(Base):
+    __tablename__='user'
+    id = Column(Integer, primary_key=True, index=True)
+    username=Column(String,nullable=False,unique=True)
+    email=Column(String,nullable=False,unique=True)
+    hashed_password=Column(String,nullable=False)
+    is_subscribed=Column(Boolean,default=False)
+    created_at=Column(DateTime(timezone=True), server_default=func.now())

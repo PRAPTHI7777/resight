@@ -17,3 +17,22 @@ class ArticleCreate(ArticleBase):
 class ArticleResponse(ArticleBase):
     id: int
     created_at: datetime
+
+class UserBase(BaseModel):
+    username: str
+    email: str
+
+class UserCreate(UserBase):
+    password:str
+
+class UserResponse(UserBase):
+    id:int
+    is_subscribed:bool
+    created_at:datetime
+    
+    class Config:
+        from_attributes=True
+
+class UserLogin(BaseModel):
+    email:str
+    password:str

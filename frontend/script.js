@@ -55,12 +55,13 @@ function onCategoryClick(category){
 
 document.addEventListener("DOMContentLoaded",()=>{
     const savedCategory=sessionStorage.getItem("category");
+    const dropdown=document.getElementById("categoryselect");
     if(savedCategory){
+        dropdown.value=savedCategory;
         fetchArticles(savedCategory);
     }else{
         fetchArticles("All");
     }
-
 });
 
 
