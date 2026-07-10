@@ -1,8 +1,14 @@
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone 
 from fastapi import HTTPException, status
-from backend import models
+import models
 from sqlalchemy.orm import Session
+
+from fastapi import Depends
+from database import get_db
+
+from fastapi.security import OAuth2PasswordBearer
+oauth2_scheme=OAuth2PasswordBearer(tokenUrl="login")
 
 SECRET_KEY = "your-super-secret-key"
 ALGORITHM = "HS256"
@@ -54,8 +60,11 @@ def verify_token(token: str):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials"
         )
-
-def get_current_user(token: str, db: Session):
+    
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+):
     email = verify_token(token)
 
     user = db.query(models.User).filter(
@@ -69,3 +78,6 @@ def get_current_user(token: str, db: Session):
         )
 
     return user
+
+
+    
