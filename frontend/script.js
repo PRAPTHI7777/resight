@@ -37,11 +37,24 @@ function renderCharacters(data){
 });
 }
 
+const searchQueries = {
+    "All": "artificial intelligence",
+    "Artificial Intelligence": "artificial intelligence",
+    "Robotics": "robotics",
+    "Cybersecurity": "cybersecurity",
+    "Quantum Computing": "quantum computing",
+    "Software": "software engineering",
+    "Energy Tech": "renewable energy"
+};
+
+
 function fetchArticles(category) {
-    let url="http://127.0.0.1:8000/articles";
-    if(category!="All"){
-        url=`http://127.0.0.1:8000/articles/category/${category}`;
-}
+    let url="http://127.0.0.1:8000/articles/live";
+    const query = searchQueries[category];
+
+if (category !== "All") {
+    url = `http://127.0.0.1:8000/articles/live?query=${encodeURIComponent(query)}`;
+} 
 fetch(url)
     .then(res => res.json())
     .then(data =>renderCharacters(data))
