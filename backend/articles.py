@@ -7,10 +7,16 @@ import schemas
 from fastapi import APIRouter
 from database import get_db
 
+from arxiv_service import fetch_papers
+
 router = APIRouter(
     prefix="/articles",
     tags=["articles"]
 )
+
+@router.get("/live")
+def get_live_articles(query: str = "artificial intelligence"):
+    return fetch_papers(query)
 
 
 @router.get('/',response_model=List[schemas.ArticleResponse])
