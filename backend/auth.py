@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from auth_handler import create_access_token
 import models
 import schemas
 from database import get_db
@@ -53,6 +54,9 @@ def login(user:schemas.UserLogin,db:Session=Depends(get_db)):
             status_code=401,
             detail="Invalid email or password"
         )
+    token = create_access_token(
+    {"sub": existing_user.email}
+)
     return {"access_token": token,
     "token_type":"bearer"}
 
