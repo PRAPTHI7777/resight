@@ -36,3 +36,15 @@ class UserResponse(UserBase):
 class UserLogin(BaseModel):
     email:str
     password:str
+
+class BookmarkCreate(BaseModel):
+    paper_id:str
+
+class BookmarkResponse(BaseModel):
+    id:int
+    user_id:int
+    paper_id:str
+    created_at:datetime
+
+    class Config:
+        from_attributes=True

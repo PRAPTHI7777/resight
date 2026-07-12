@@ -7,6 +7,7 @@ from database import engine
 import articles
 import psycopg2
 import auth
+import bookmarks
 
 app = FastAPI()
 
@@ -33,3 +34,4 @@ def root():
     return {"message":"Welcome to the Articles API"}
 
 app.include_router(auth.router)
+app.include_router(bookmarks.router)
