@@ -7,6 +7,8 @@ import schemas
 from database import get_db
 from utils import hash_password, verify_password
 
+from fastapi.security import OAuth2PasswordRequestForm
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
@@ -39,9 +41,12 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 @router.post("/login")
-def login(user:schemas.UserLogin,db:Session=Depends(get_db)):
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
     existing_user = db.query(models.User).filter(
-        models.User.email == user.email
+        models.User.email == form_data.username
     ).first()
 
     if not existing_user:
@@ -49,16 +54,24 @@ def login(user:schemas.UserLogin,db:Session=Depends(get_db)):
             status_code=401,
             detail="Invalid email or password"
         )
-    if not verify_password(user.password, existing_user.hashed_password):
+
+    if not verify_password(
+        form_data.password,
+        existing_user.hashed_password
+    ):
         raise HTTPException(
             status_code=401,
             detail="Invalid email or password"
         )
+
     token = create_access_token(
-    {"sub": existing_user.email}
-)
-    return {"access_token": token,
-    "token_type":"bearer"}
+        {"sub": existing_user.email}
+    )
+
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }
 
 
 

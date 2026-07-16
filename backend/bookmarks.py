@@ -11,12 +11,12 @@ router=APIRouter(
 
 @router.post("/",response_model=schemas.BookmarkResponse)
 def add_bookmark(
-    bookmark:schemas.BookmarkCreate,
+    Bookmark:schemas.BookmarkCreate,
     db:Session=Depends(get_db),
     current_user=Depends(get_current_user)):
-    existing=db.query(models.bookmark).filter(
+    existing=db.query(models.Bookmark).filter(
         models.Bookmark.user_id==current_user.id,
-        models.Bookmark.article_id==bookmark.paper_id).first()
+        models.Bookmark.article_id==Bookmark.article_id).first()
     if existing:
         raise HTTPException(
             status_code=400,
@@ -24,7 +24,7 @@ def add_bookmark(
         )
     new_bookmark=models.Bookmark(
         user_id=current_user.id,
-        paper_id=bookmark.paper_id
+        article_id=Bookmark.article_id
     )
     db.add(new_bookmark)
     db.commit()
@@ -42,15 +42,15 @@ def get_bookmarks(
 
     return bookmarks
 
-@router.delete("/{paper_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_bookmark(
-    paper_id: str,
+    article_id: str,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
     bookmark = db.query(models.Bookmark).filter(
         models.Bookmark.user_id == current_user.id,
-        models.Bookmark.paper_id == paper_id
+        models.Bookmark.article_id == article_id
     ).first()
 
     if bookmark is None:
