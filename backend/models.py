@@ -25,9 +25,9 @@ class Bookmark(Base):
     __tablename__='bookmark'
     id=Column(Integer,primary_key=True,index=True)
     user_id=Column(Integer, ForeignKey("user.id"))
-    paper_id=Column(Integer,nullable=False)
+    article_id=Column(String,nullable=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now())
    #composite unique constraint:same user can't bookmark the same paper twice, even if two requests arrive simultaneously
     __table_args__ = (
-        UniqueConstraint("user_id", "paper_id", name="unique_user_bookmark"),
+        UniqueConstraint("user_id", "article_id", name="unique_user_bookmark"),
     )
