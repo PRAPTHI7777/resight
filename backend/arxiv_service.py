@@ -16,6 +16,7 @@ def fetch_papers(query: str="artificial intelligence"):
 
     for entry in feed.entries:
         papers.append({
+            "id": entry.id,
             "title": entry.title,
             "description": entry.summary,
             "authors": [author.name for author in entry.authors],

@@ -5,6 +5,7 @@ function renderCharacters(data){
     container.innerHTML = '';
     
     data.forEach(item => {
+        console.log(item.id);
         // 1. Structural Elements
         const itemDiv = document.createElement('div');
         const pict = document.createElement('div');
@@ -76,13 +77,33 @@ function renderCharacters(data){
             }
         });
 
-        bookmarkBtn.addEventListener("click", () => {
-            if (bookmarkImg.src.includes('1.jpg')) {
-                bookmarkImg.src = 'icons/2.jpg'; // Swaps to your second bookmark image
-            } else {
-                bookmarkImg.src = 'icons/1.jpg'; // Swaps back
-            }
-        });
+        bookmarkBtn.addEventListener("click",async () => {
+            const token = sessionStorage.getItem("token");
+
+            if (!token) {
+            alert("Please login to bookmark papers.");
+            window.location.href = "login.html";
+            return;
+           }
+  const response = await fetch("http://127.0.0.1:8000/bookmarks", {
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        article_id: item.id
+    })
+});
+
+if(response.ok){
+     if (bookmarkImg.src.includes('1.jpg')) {
+    bookmarkImg.src = 'icons/2.jpg';
+} else {
+    bookmarkImg.src = 'icons/1.jpg';
+}
+}
+    });
 
         // 8. Assemble DOM Tree
         verticle.appendChild(titleDiv);
