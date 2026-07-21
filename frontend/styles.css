@@ -122,7 +122,7 @@
 }
 
 /* Card Container */
-.login-card { 
+.login-card,.signup-card { 
   background: white; 
   padding: 30px; 
   border-radius: 8px; 
@@ -179,6 +179,44 @@
 
 .forgot-link:hover {
   text-decoration: underline;
+}
+
+.signup-link,
+.noacc {
+    font-size: 12px;
+    text-align: center;
+    padding-top:px;
+
+}
+
+/* Container holding date, category, and actions on one line */
+.footer-row {
+    display: flex;
+    justify-content: space-between; /* Spreads elements across the full width */
+    align-items: center;            /* Perfectly centers them vertically together */
+    margin-top: auto;               /* Pushes the entire row down if container uses flex direction column */
+    padding-top: 10px;
+    width: 100%;
+}
+
+/* Optional styling to isolate and group buttons closely */
+.actions-group {
+    display: flex;
+    gap: 8px;                       /* Tiny spacing between heart and bookmark icon */
+}
+
+/* Strip default button styling for a cleaner web design look */
+.like-btn, .bookmark-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+}
+.bookmark-btn:hover{
+    background: none;
+}
+.like-btn:hover{
+    background: none;
 }
 
 
