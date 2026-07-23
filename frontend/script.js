@@ -63,7 +63,7 @@ function renderCharacters(data){
             authorDiv.textContent = '- Unknown Author';
         }
         
-        summaryDiv.textContent = item.description || "No Description";
+        summaryDiv.textContent = item.summary || "No Description";
         dateDiv.textContent = item.date || "Unknown Date";
         categoryDiv.textContent = item.category || "Unknown Category";
 
