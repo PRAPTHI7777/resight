@@ -1,2 +1,4 @@
-def summarizer(text:str):
-    return text[:250]+"..."
+def summariser(text:str):
+    return text[:300] + "..."
+    
+        
