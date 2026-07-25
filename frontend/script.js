@@ -40,7 +40,13 @@ function renderCharacters(data){
         bookmarkImg.alt = "Bookmark button";
         bookmarkImg.style.width = "20px";
         bookmarkImg.style.height = "25px";
-        bookmarkBtn.appendChild(bookmarkImg); 
+        bookmarkBtn.appendChild(bookmarkImg);
+        
+        //Read BTN
+        const readBtn = document.createElement("button");
+        readBtn.className = "read-btn";
+        readBtn.textContent = "Read More";
+
 
         // 5. Apply CSS Classes
         itemDiv.className = 'container';
@@ -104,6 +110,15 @@ if(response.ok){
 }
 }
     });
+    readBtn.addEventListener("click", () => {
+    console.log("Read More Clicked!!");
+    sessionStorage.setItem(
+        "selectedPaper",
+        JSON.stringify(item)
+    );
+
+    window.location.href = "paper.html";
+});
 
         // 8. Assemble DOM Tree
         verticle.appendChild(titleDiv);
@@ -113,7 +128,7 @@ if(response.ok){
         // Group the buttons side-by-side
         actionsGroup.appendChild(likeBtn);
         actionsGroup.appendChild(bookmarkBtn);
-
+        actionsGroup.appendChild(readBtn);
         // Add metadata and buttons to the single horizontal row
         footerRow.appendChild(dateDiv);
         footerRow.appendChild(categoryDiv);
