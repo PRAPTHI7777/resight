@@ -218,5 +218,46 @@
 .like-btn:hover{
     background: none;
 }
+body{
+    font-family: Arial, sans-serif;
+    background:#f8f8f8;
+}
 
+.paper-container{
+    width:900px;
+    margin:50px auto;
+    background:white;
+    padding:50px;
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+#title{
+    font-size:40px;
+    margin-bottom:20px;
+}
+
+.paper-meta{
+    color:gray;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+h2{
+    margin-top:35px;
+}
+
+#summary,
+#description{
+    font-size:18px;
+    line-height:1.8;
+    text-align:justify;
+}
+
+#paperLink{
+    display:inline-block;
+    margin-top:30px;
+    text-decoration:none;
+    font-weight:bold;
+}
 
