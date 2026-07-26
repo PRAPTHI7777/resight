@@ -14,6 +14,9 @@ paper.date;
 document.getElementById("category").textContent =
 paper.category;
 
+document.getElementById("summary").textContent =
+paper.description;
+
 document.getElementById("description").textContent =
 paper.description;
 

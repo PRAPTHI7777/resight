@@ -1,6 +1,6 @@
 import requests
 import feedparser
-from summarizer import summariser
+from summarizer import summarizer
 
 BASE_URL = "http://export.arxiv.org/api/query"
 
@@ -19,11 +19,12 @@ def fetch_papers(query: str="artificial intelligence"):
         papers.append({
         "id": entry.id,
         "title": entry.title,
-        "description": entry.summary,
+        "description": summarizer(entry.summary),
         "authors": [author.name for author in entry.authors],
         "date": entry.published,
         "category": "Artificial Intelligence",
         "link": entry.link
 })
+    print(papers)
     return papers
 
