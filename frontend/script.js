@@ -74,14 +74,14 @@ function renderCharacters(data){
         categoryDiv.textContent = item.category || "Unknown Category";
 
         // 7. Event Listeners (Image Toggle Logic)
-        likeBtn.addEventListener("click", () => {
+        /*likeBtn.addEventListener("click", () => {
             // Checks if the file path contains your default file name
             if (likeImg.src.includes('likebtn1.jpg')) {
                 likeImg.src = 'icons/likebtn2.jpg'; // Swaps to active state image
             } else {
                 likeImg.src = 'icons/likebtn1.jpg'; // Swaps back
             }
-        });
+        });*/
 
         bookmarkBtn.addEventListener("click",async () => {
             const token = sessionStorage.getItem("token");
@@ -123,6 +123,38 @@ if(response.ok){
 
     window.location.href = "paper.html";
 });
+
+likeBtn.addEventListener("click",async () => {
+            const token = sessionStorage.getItem("token");
+
+            if (!token) {
+            alert("Please login to like papers.");
+            window.location.href = "login.html";
+            return;
+           }
+  const response = await fetch("http://127.0.0.1:8000/likes", {
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        article_id: item.id,
+        title: item.title,
+        authors: item.authors,
+        summary: item.description,
+        link: item.link
+    })
+});
+
+if(response.ok){
+     if (likeImg.src.includes('likebtn1.jpg')) {
+    likeImg.src = 'icons/likebtn2.jpg';
+} else {
+    likeImg.src = 'icons/likebtn1.jpg';
+}
+}
+    });
 
         // 8. Assemble DOM Tree
         verticle.appendChild(titleDiv);
