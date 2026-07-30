@@ -14,10 +14,11 @@
         <button class="interests">Cybersecurity</button>
         <button class="interests">Quantum Computing</button>
         <div class="search-bar"><input type="text" placeholder="Search interests..."></div>
-        <button class="profile"><img src="icons/prof2.jpg" height="25px"></button>
+        <button class="profile" onclick="window.location.href='profile.html'"><img src="icons/prof2.jpg" height="25px">
+</button>
         <button class="newsletter">NEWSLETTER</button>
        </div>
-     <div class="dropdown">
+    <div class="dropdown">
     <label for="categories">Filter by categories:</label>
     <select id="categoryselect" onchange="onCategoryClick(this.value); sessionStorage.setItem('category', this.value);">
     

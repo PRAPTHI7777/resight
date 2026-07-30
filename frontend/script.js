@@ -69,7 +69,7 @@ function renderCharacters(data){
             authorDiv.textContent = '- Unknown Author';
         }
         
-        summaryDiv.textContent = item.summary || "No Description";
+        summaryDiv.textContent = item.description || "No Description";
         dateDiv.textContent = item.date || "Unknown Date";
         categoryDiv.textContent = item.category || "Unknown Category";
 
@@ -98,7 +98,11 @@ function renderCharacters(data){
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
-        article_id: item.id
+        article_id: item.id,
+        title: item.title,
+        authors: item.authors,
+        summary: item.description,
+        link: item.link
     })
 });
 

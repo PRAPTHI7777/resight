@@ -25,6 +25,5 @@ def fetch_papers(query: str="artificial intelligence"):
         "category": "Artificial Intelligence",
         "link": entry.link
 })
-    print(papers)
     return papers
 

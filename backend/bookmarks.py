@@ -24,7 +24,11 @@ def add_bookmark(
         )
     new_bookmark=models.Bookmark(
         user_id=current_user.id,
-        article_id=Bookmark.article_id
+        article_id=Bookmark.article_id,
+        title=Bookmark.title,
+        authors=Bookmark.authors,
+        summary=Bookmark.summary,
+        link=Bookmark.link
     )
     db.add(new_bookmark)
     db.commit()
@@ -42,20 +46,20 @@ def get_bookmarks(
 
     return bookmarks
 
-@router.delete("/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}")
 def delete_bookmark(
-    article_id: str,
+    id: int,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
     bookmark = db.query(models.Bookmark).filter(
-        models.Bookmark.user_id == current_user.id,
-        models.Bookmark.article_id == article_id
+        models.Bookmark.id == id,
+        models.Bookmark.user_id == current_user.id
     ).first()
 
     if bookmark is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=404,
             detail="Bookmark not found"
         )
 

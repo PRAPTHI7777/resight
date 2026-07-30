@@ -38,12 +38,21 @@ class UserLogin(BaseModel):
     password:str
 
 class BookmarkCreate(BaseModel):
-    article_id:str
+    article_id: str
+    title: str
+    authors: list[str]
+    summary: str
+    link: str
 
 class BookmarkResponse(BaseModel):
     id:int
     user_id:int
+
     article_id:str
+    title: str
+    authors: list[str]
+    summary: str
+    link: str
     created_at:datetime
 
     class Config:
