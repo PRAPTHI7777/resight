@@ -260,4 +260,76 @@ h2{
     text-decoration:none;
     font-weight:bold;
 }
+.bookmark-card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    margin:20px 0;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
+}
 
+.bookmark-card h3{
+    margin-bottom:10px;
+}
+
+.bookmark-card p{
+    margin:10px 0;
+}
+
+.bookmark-card a{
+    color:#0066cc;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.option-card{
+
+background:white;
+
+padding:20px;
+
+margin:20px;
+
+border-radius:15px;
+
+cursor:pointer;
+
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+}
+
+.bookmark-card{
+
+background:white;
+
+padding:20px;
+
+margin:20px;
+
+border-radius:15px;
+
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+}
+
+.bookmark-card button{
+
+margin-top:15px;
+
+padding:10px;
+
+border:none;
+
+background:red;
+
+color:white;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}
+.mybookmarks{
+    justify-content: center;
+    display:flex;
+}

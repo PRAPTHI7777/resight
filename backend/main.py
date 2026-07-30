@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
+import users
 import models
 from database import engine
 import articles
@@ -35,3 +36,4 @@ def root():
 
 app.include_router(auth.router)
 app.include_router(bookmarks.router)
+app.include_router(users.router)
