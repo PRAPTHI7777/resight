@@ -57,3 +57,24 @@ class BookmarkResponse(BaseModel):
 
     class Config:
         from_attributes=True
+    
+class LikeCreate(BaseModel):
+    article_id: str
+    title: str
+    authors: list[str]
+    summary: str
+    link: str
+
+class LikeResponse(BaseModel):
+    id:int
+    user_id:int
+
+    article_id:str
+    title: str
+    authors: list[str]
+    summary: str
+    link: str
+    created_at:datetime
+
+    class Config:
+        from_attributes=True

@@ -329,7 +329,7 @@ border-radius:8px;
 cursor:pointer;
 
 }
-.mybookmarks{
+.mybookmarks,.likes{
     justify-content: center;
     display:flex;
 }
