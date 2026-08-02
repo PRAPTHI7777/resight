@@ -30,7 +30,7 @@
             background-color: transparent;
         }  
         button:hover{
-            background-color: lightgray;
+           
             cursor: pointer;
         }
         .newsletter{
@@ -43,12 +43,7 @@
             background-color: transparent;
             
         }
-        .search-bar{
-            height:30px;
-            width:100%;
-            display: flex;
-            align-items: center;
-         }
+        
         .profile{
             height:50px;
             width:50px;
@@ -63,6 +58,11 @@
         }
         
         .container {
+            background:rgba(255,255,255,0.1);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter:blur(40px);
+            border:1px solid rgba(255,255,255,0.2);
+            border-radius:20px;
             height:350px;
             width:1000px;
             display: grid;
@@ -70,8 +70,10 @@
             gap: 15px;
             padding: 20px;
             justify-self: center;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.253);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             margin:25px;
+            color:black;
+            
         }
         .verticalcontain{
             display: flex;
@@ -99,6 +101,7 @@
             height:170px;
             width:100%;
             font-size: 20px;
+        
         }
         .date{
             height:20px;
@@ -333,3 +336,60 @@ cursor:pointer;
     justify-content: center;
     display:flex;
 }
+body {
+    /* Link your image file here */
+    background-image: url('icons\\download (2).jpg'); 
+
+    /* Prevent the image from repeating like a grid */
+    background-repeat: no-repeat; 
+
+    /* Center the image horizontally and vertically */
+    background-position: center; 
+
+    /* Stretch the image to perfectly cover the entire screen */
+    background-size: cover; 
+
+    /* Keep the background fixed in place while scrolling */
+    background-attachment: fixed; 
+}
+
+.read-btn{
+    background-color:Transparent;
+    border:none;
+}
+
+         .search-input,.category-select {
+  width: 200px;
+  padding: 14px 20px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 30px;
+
+  color: black;
+  font-size: 16px;
+
+  outline: none;
+  transition: all 0.3s ease;
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.search-input::placeholder {
+  color: black;
+}
+
+.search-input:focus {
+  border-color: white;
+  box-shadow:
+    0 0 20px white,
+    0 8px 32px white;
+}
+
+
+
