@@ -25,7 +25,7 @@ function renderCharacters(data){
         likeBtn.className = "like-btn";
         
         const likeImg = document.createElement("img");
-        likeImg.src = 'icons/likebtn1.jpg'; // Your default unliked image
+        likeImg.src = 'icons\\like1.png'; // Your default unliked image
         likeImg.alt = "like";
         likeImg.style.width = "45px";
         likeImg.style.height = "40px";
@@ -36,7 +36,7 @@ function renderCharacters(data){
         bookmarkBtn.className = "bookmark-btn";
         
         const bookmarkImg = document.createElement("img");
-        bookmarkImg.src = 'icons/1.jpg'; // Your default unbookmarked image
+        bookmarkImg.src = 'icons\\bookmrk1.png'; // Your default unbookmarked image
         bookmarkImg.alt = "Bookmark button";
         bookmarkImg.style.width = "20px";
         bookmarkImg.style.height = "25px";
@@ -107,10 +107,10 @@ function renderCharacters(data){
 });
 
 if(response.ok){
-     if (bookmarkImg.src.includes('1.jpg')) {
-    bookmarkImg.src = 'icons/2.jpg';
+     if (bookmarkImg.src.includes('1.png')) {
+    bookmarkImg.src = 'icons\\bookmrk2.png';
 } else {
-    bookmarkImg.src = 'icons/1.jpg';
+    bookmarkImg.src = 'icons\\bookmrk1.png';
 }
 }
     });
@@ -148,10 +148,10 @@ likeBtn.addEventListener("click",async () => {
 });
 
 if(response.ok){
-     if (likeImg.src.includes('likebtn1.jpg')) {
-    likeImg.src = 'icons/likebtn2.jpg';
+     if (likeImg.src.includes('icons\like1.png')) {
+    likeImg.src = 'icons\like2.png';
 } else {
-    likeImg.src = 'icons/likebtn1.jpg';
+    likeImg.src = 'icons\like1.png';
 }
 }
     });
