@@ -115,49 +115,121 @@
         }
 
 
-.login-page { 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  min-height: 100vh;  
-  font-family: sans-serif; 
-  margin: 0;
+.login-page{
+    background-image:url("icons/bg4.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    padding-left:80px;
+    padding-top:120px;
+    font-family:"Inter",sans-serif;
+
+    margin:0;
+    padding:40px;
 }
 
 /* Card Container */
-.login-card,.signup-card { 
-  background: white; 
-  padding: 30px; 
-  border-radius: 8px; 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-  display: flex; 
-  flex-direction: column; 
-  width: 300px; 
-  gap: 15px; 
+.login-card,
+.signup-card{
+
+    width:430px;
+
+    padding:55px 45px;
+
+    border-radius:30px;
+
+   background:rgba(20,20,20,.45);
+
+backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+    transform: translate(70px, 70px);
+
 }
 
-.login-title { 
-  text-align: center; 
-  margin: 0; 
-  color: #333;
-}
+.login-input{
 
+    width:100%;
+
+    
+
+    border:none;
+
+    border-radius:30px;
+
+    padding:0 20px;
+
+    outline:none;
+
+    height:58px;
+
+font-size:17px;
+
+padding-left:22px;
+}
 /* Inputs & Button */
-.login-input, 
-.login-btn { 
-  padding: 10px; 
-  border-radius: 4px; 
-  font-size: 14px; 
+.login-btn{
+
+    width:100%;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#8b2d1d;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.login-btn:hover{
+
+    background:#6e2317;
+
+}
+
+.login-btn:hover{
+
+    background:#6e2317;
+
+    transform:translateY(-2px);
+
 }
 
 .login-input { 
   border: 1px solid #ccc; 
+  width:auto;
 }
 
 .login-btn { 
   background: #007bff; 
   color: white; 
-  border: none; 
+  border: none;
+  height:40px;
+  align-items: center;
+  width:100%;
   cursor: pointer; 
   font-weight: bold; 
 }
@@ -167,26 +239,37 @@
 }
 
 /* Options Row */
-.login-options { 
-  display: flex; 
-  justify-content: space-between; 
-  font-size: 12px; 
+.login-options{
+
+    display:flex;
+
+    justify-content:flex-end;
+
 }
 
+.forgot-link{
 
-.forgot-link { 
-  color: #007bff; 
-  text-decoration: none;
-  align-items: center;
+    color:white;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    transition:.3s;
+
 }
 
-.forgot-link:hover {
-  text-decoration: underline;
+.forgot-link:hover{
+
+    color:#ffe5d5;
+
 }
 
 .signup-link,
 .noacc {
-    font-size: 12px;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
     text-align: center;
     padding-top:px;
 
@@ -336,22 +419,7 @@ cursor:pointer;
     justify-content: center;
     display:flex;
 }
-body {
-    /* Link your image file here */
-    background-image: url('icons\\download (2).jpg'); 
 
-    /* Prevent the image from repeating like a grid */
-    background-repeat: no-repeat; 
-
-    /* Center the image horizontally and vertically */
-    background-position: center; 
-
-    /* Stretch the image to perfectly cover the entire screen */
-    background-size: cover; 
-
-    /* Keep the background fixed in place while scrolling */
-    background-attachment: fixed; 
-}
 
 .read-btn{
     background-color:Transparent;
