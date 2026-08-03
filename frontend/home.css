@@ -71,7 +71,7 @@ nav li{
 
 nav li:hover{
 
-    color:#8b2d1d;
+    color:black;
 
 }
 
@@ -131,7 +131,7 @@ nav li:hover{
 
     font-size:130px;
 
-    color:#8b2d1d;
+    color:black;
 
     font-family:"Playfair Display",serif;
   /* Multiple overlapping shadows create a smooth white outline background */
@@ -204,7 +204,7 @@ nav li:hover{
 
 .today-card h3{
 
-    color:#8b2d1d;
+    color:black;
 
 }
 
@@ -226,7 +226,7 @@ nav li:hover{
 
     border-radius:10px;
 
-    background:#8b2d1d;
+    background:white;
 
     color:white;
 
@@ -309,7 +309,7 @@ nav li:hover{
 
     border-radius:10px;
 
-    background:#8b2d1d;
+    background:black;
 
     color:white;
 
@@ -361,7 +361,7 @@ nav li:hover{
 
     margin-bottom:15px;
 
-    color:#8b2d1d;
+    color:black;
 
 }
 

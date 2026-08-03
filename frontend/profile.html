@@ -1,18 +1,107 @@
-<h1>👤 My Profile</h1>
+<!DOCTYPE html>
 
-<h2 id="username"></h2>
-<p id="email"></p>
+<html lang="en">
 
-<div class="option-card" onclick="window.location.href='bookmarks.html'">
-    <h2>📚 My Bookmarks</h2>
-    <p>View your saved papers</p>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profile | Resight</title>
+
+<link rel="stylesheet" href="profile.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav>
+
+        <h2 class="nav-logo">R</h2>
+
+        <ul>
+
+            <li>Home</li>
+            <li>Artificial Intelligence</li>
+            <li>Robotics</li>
+            <li>Cybersecurity</li>
+            <li>Quantum</li>
+            <li>Bookmarks</li>
+            <li>Profile</li>
+
+        </ul>
+
+    </nav>
+
+
+<div class="profile-container">
+
+<div class="profile-card">
+
+<div class="avatar">
+
+👤
+
 </div>
 
-<div class="option-card" onclick="window.location.href='likes.html'">
-    <h2>❤️ Liked Papers</h2>
-    <p>View liked papers</p>
+<h1 id="username">Loading...</h1>
+
+<p id="email">Loading...</p>
+
+<div class="stats">
+
+<div class="stat">
+
+<h2 id="bookmarkCount">0</h2>
+
+<span>Bookmarks</span>
+
 </div>
 
-<button id="logoutBtn">Logout</button>
+<div class="stat">
+
+<h2 id="likeCount">0</h2>
+
+<span>Likes</span>
+
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button onclick="location.href='bookmarks.html'">
+
+My Bookmarks
+
+</button>
+
+<button onclick="location.href='likes.html'">
+
+My Likes
+
+</button>
+
+<button class="logout" onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 <script src="profile.js"></script>
+
+</body>
+
+</html>

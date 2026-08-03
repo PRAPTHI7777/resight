@@ -130,7 +130,6 @@
     padding-left:80px;
     padding-top:120px;
     font-family:"Inter",sans-serif;
-
     margin:0;
     padding:40px;
 }
@@ -138,7 +137,7 @@
 /* Card Container */
 .login-card,
 .signup-card{
-
+   position:fixed;
     width:430px;
 
     padding:55px 45px;
