@@ -2,26 +2,34 @@
 <html>
     <head>
         <title>RESIGHT</title>
-        <link rel="stylesheet" href="styles.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="index.css">
     </head>
     <body>
-       <div class="topbar">
-        <button class="Buttons"><img src="icons/menus.png" height="25px"></button>
-        <text class="logo"> RESIGHT</text>
-        <button class="interests">Artificial Intelligence</button>
-        <button class="interests">Robotics</button>
-        <button class="interests">Software</button>
-        <button class="interests">Cybersecurity</button>
-        <button class="interests">Quantum Computing</button>
-        <div class="search-bar"><input type="text" class="search-input" placeholder="Search interests..."></div>
-        <button class="profile" onclick="window.location.href='profile.html'"><img src="icons/prof2.jpg" height="25px">
-</button>
-        <button class="newsletter">NEWSLETTER</button>
-       </div>
+        <nav>
+
+        <h2 class="nav-logo">R</h2>
+
+        <ul>
+
+            <li onclick="location.href='home.html'">Home</li>
+            <li>Artificial Intelligence</li>
+            <li>Robotics</li>
+            <li>Cybersecurity</li>
+            <li>Quantum</li>
+            <li>Bookmarks</li>
+            <li onclick="location.href='profile.html'">Profile</li>
+
+        </ul>
+
+    </nav>
+
     <div class="dropdown">
     <label for="categories">Filter by categories:</label>
     <select id="categoryselect" class="category-select" onchange="onCategoryClick(this.value); sessionStorage.setItem('category', this.value);">
-    
+
     <option value="All">All</option>
     <option value="Energy Tech">Energy Tech</option>
     <option value="Robotics">Robotics</option>
@@ -30,7 +38,7 @@
     <option value="Cybersecurity">Cybersecurity</option>
     <option value="Quantum Computing">Quantum Computing</option>
     </select>
-    </div> 
+    </div>
        <div class="contain">
        <div class="container">
         <div class="picture"></div>
@@ -45,7 +53,5 @@
       </div>
       <script src="./script.js" defer></script>
        </body>
-    
+
 </html>
-    
-    

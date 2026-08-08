@@ -1,0 +1,249 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Inter",Arial,sans-serif;
+    background:#f7f3ef;
+    color:#222;
+}
+
+/* ---------------- NAVBAR ---------------- */
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    row-gap:10px;
+    padding:18px 60px;
+    border-bottom:1px solid #d9d9d9;
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.nav-logo{
+    font-family:"Playfair Display",serif;
+    color:#8b2d1d;
+    font-size:34px;
+}
+
+nav ul{
+    display:flex;
+    flex-wrap:wrap;
+    gap:35px;
+    list-style:none;
+}
+
+nav li{
+    cursor:pointer;
+    transition:.3s;
+    font-weight:500;
+    white-space:nowrap;
+}
+
+nav li:hover{
+    color:black;
+}
+
+/* ---------------- FILTER BAR ---------------- */
+
+.dropdown{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    padding:25px 60px 0 60px;
+}
+
+.dropdown label{
+    font-size:15px;
+    font-weight:500;
+    color:#555;
+}
+
+.category-select{
+    min-width:200px;
+    padding:10px 18px;
+    background:white;
+    color:#222;
+    border:1px solid #d9d9d9;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+    outline:none;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+    transition:.2s;
+}
+
+.category-select:focus{
+    border-color:#8b2d1d;
+    box-shadow:0 0 0 3px rgba(139,45,29,.15);
+}
+
+/* ---------------- FEED LAYOUT ---------------- */
+
+.contain{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px 60px 60px 60px;
+}
+
+.container{
+    background:white;
+    border-radius:20px;
+    width:100%;
+    max-width:1000px;
+    display:grid;
+    grid-template-columns:minmax(140px,300px) 1fr;
+    align-items:start;
+    gap:25px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    margin:15px 0;
+    color:#222;
+    transition:.3s;
+}
+
+.container:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,.1);
+}
+
+.picture{
+    width:100%;
+    aspect-ratio:1 / 1;
+    background-color:#ececec;
+    background-size:cover;
+    background-position:center;
+    border-radius:14px;
+}
+
+.verticalcontain{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-width:0;
+}
+
+.title{
+    font-size:clamp(19px,2.2vw,25px);
+    font-weight:600;
+    line-height:1.3;
+}
+
+.authors{
+    font-size:16px;
+    color:gray;
+}
+
+.summary{
+    font-size:16px;
+    line-height:1.5;
+    color:#444;
+}
+
+.date{
+    font-size:14px;
+    color:gray;
+}
+
+.category{
+    font-size:14px;
+    color:#8b2d1d;
+    font-weight:500;
+}
+
+/* Row holding date, category, and like/bookmark/read-more actions */
+.footer-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    grid-column:1 / -1;
+    margin-top:15px;
+    padding-top:15px;
+    border-top:1px solid #eee;
+    width:100%;
+}
+
+.actions-group{
+    display:flex;
+    gap:8px;
+}
+
+.like-btn,
+.bookmark-btn{
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:2px;
+}
+
+.read-btn{
+    background:transparent;
+    border:none;
+    font-weight:600;
+    color:#8b2d1d;
+    cursor:pointer;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media(max-width:900px){
+    nav{
+        padding:16px 30px;
+    }
+
+    .dropdown{
+        padding:20px 30px 0 30px;
+    }
+
+    .contain{
+        padding:20px 30px 50px 30px;
+    }
+}
+
+@media(max-width:700px){
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .picture{
+        max-width:220px;
+        margin:0 auto;
+    }
+}
+
+@media(max-width:500px){
+    nav{
+        padding:14px 20px;
+    }
+
+    .nav-logo{
+        font-size:28px;
+    }
+
+    nav ul{
+        gap:18px;
+        font-size:14px;
+    }
+
+    .dropdown{
+        padding:16px 20px 0 20px;
+    }
+
+    .contain{
+        padding:16px 20px 40px 20px;
+    }
+
+    .container{
+        padding:18px;
+    }
+}
