@@ -210,6 +210,15 @@ function onCategoryClick(category){
     fetchArticles(category);
 }
 
+// Used by the nav bar links (e.g. "Artificial Intelligence", "Robotics")
+// so clicking them filters the feed the same way the dropdown does.
+function filterByCategory(category){
+    sessionStorage.setItem("category", category);
+    const dropdown = document.getElementById("categoryselect");
+    if (dropdown) dropdown.value = category; // keep dropdown in sync
+    fetchArticles(category);
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
     const savedCategory=sessionStorage.getItem("category");
     const dropdown=document.getElementById("categoryselect");
@@ -220,8 +229,3 @@ document.addEventListener("DOMContentLoaded",()=>{
         fetchArticles("All");
     }
 });
-
-
-
-
-
