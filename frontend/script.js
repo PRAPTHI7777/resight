@@ -229,3 +229,54 @@ document.addEventListener("DOMContentLoaded",()=>{
         fetchArticles("All");
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const searchInput = document.getElementById("searchInput");
+
+    console.log("search input:", searchInput);
+
+    if (!searchInput) {
+        console.log("Search input not found!");
+        return;
+    }
+
+    searchInput.addEventListener("keydown", async function(event) {
+
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        const query = searchInput.value.trim();
+
+        console.log("SEARCH:", query);
+
+        if (query === "") {
+            return;
+        }
+
+        const url =
+            `http://127.0.0.1:8000/articles/live?query=${encodeURIComponent(query)}`;
+
+        try {
+
+            const response = await fetch(url);
+
+            console.log("Response:", response.status);
+
+            const data = await response.json();
+
+            console.log("Results:", data);
+
+            renderCharacters(data);
+
+        } catch (error) {
+
+            console.error("Search error:", error);
+
+        }
+
+    });
+
+});
