@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Verify OTP</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="login-page">
+
+    <form id="otpForm" class="login-card">
+
+        <h2>Enter OTP</h2>
+
+        <p>We sent a 6-digit code to your email.</p>
+
+        <input
+            id="otp"
+            type="text"
+            class="login-input"
+            placeholder="Enter OTP"
+            maxlength="6"
+            required
+        >
+
+        <button
+            type="submit"
+            class="login-btn"
+        >
+            Verify OTP
+        </button>
+
+        <p id="message"></p>
+
+    </form>
+
+    <script src="reset-otp.js"></script>
+
+</body>
+
+</html>
