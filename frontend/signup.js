@@ -1,30 +1,44 @@
-const form = document.getElementById("signupForm");
+const signupForm = document.getElementById("signupForm");
+const message = document.getElementById("message");
 
-form.addEventListener("submit", async function (event) {
+signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const response = await fetch("http://127.0.0.1:8000/auth/signup", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password
-        })
-    });
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:8000/auth/send-otp",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                })
+            }
+        );
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (response.ok) {
-        alert("Account created successfully!");
-        window.location.href = "login.html";
-    } else {
-        alert(data.detail);
+        if (!response.ok) {
+            message.textContent = data.detail;
+            return;
+        }
+
+        // Save the email temporarily so the OTP page knows
+        // which account is being verified.
+        sessionStorage.setItem("signupEmail", email);
+
+        window.location.href = "verify-otp.html";
+
+    } catch (error) {
+        console.error(error);
+        message.textContent = "Something went wrong.";
     }
 });

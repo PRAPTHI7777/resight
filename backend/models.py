@@ -20,7 +20,9 @@ class User(Base):
     hashed_password=Column(String,nullable=False)
     is_subscribed=Column(Boolean,default=False)
     created_at=Column(DateTime(timezone=True), server_default=func.now())
-
+    otp = Column(String, nullable=True)
+    otp_expires_at = Column(DateTime(timezone=True), nullable=True) 
+ 
 class Bookmark(Base):
     __tablename__='bookmark'
 

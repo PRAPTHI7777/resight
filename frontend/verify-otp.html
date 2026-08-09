@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Verify Email</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="login-page">
+
+    <form id="otpForm" class="signup-card">
+
+        <h2>Verify your email</h2>
+
+        <p>
+            Enter the 6-digit OTP sent to your email.
+        </p>
+
+        <input
+            id="otp"
+            type="text"
+            class="login-input"
+            placeholder="Enter OTP"
+            maxlength="6"
+            required
+        >
+
+        <button
+            type="submit"
+            class="login-btn"
+        >
+            Verify
+        </button>
+
+        <p id="otpMessage"></p>
+
+    </form>
+
+    <script src="verify-otp.js"></script>
+
+</body>
+
+</html>
