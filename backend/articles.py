@@ -9,6 +9,8 @@ from database import get_db
 
 from arxiv_service import fetch_papers
 
+from gemini_service import generate_summary
+
 router = APIRouter(
     prefix="/articles",
     tags=["articles"]
@@ -31,7 +33,20 @@ def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(new_article)
     return [new_article]
-        
+
+
+@router.get("/test-gemini")
+def test_gemini():
+
+    summary = generate_summary(
+        "Artificial Intelligence",
+        "Artificial intelligence systems can learn patterns from large datasets and use those patterns to make predictions."
+    )
+
+    return {
+        "summary": summary
+    }
+
 @router.get('/{id}',response_model=schemas.ArticleResponse)
 def get_article(id:int, db: Session = Depends(get_db)):
     article = db.query(models.Article).filter(models.Article.id == id).first()
@@ -63,3 +78,4 @@ def update_article(id:int , updated_article: schemas.ArticleCreate, db: Session 
 def get_articles_by_category(category: str, db: Session = Depends(get_db)):
     articles = db.query(models.Article).filter(models.Article.category == category).all()
     return articles
+
