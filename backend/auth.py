@@ -12,6 +12,7 @@ from utils import hash_password, verify_password
 
 from fastapi.security import OAuth2PasswordRequestForm
 
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
@@ -188,3 +189,4 @@ def reset_password(
     return {
         "message": "Password reset successfully"
     }
+
