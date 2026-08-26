@@ -12,6 +12,7 @@ import bookmarks
 import likes
 from subscription import router as subscription_router
 from digest import router as digest_router
+from scheduler import start_scheduler
 app = FastAPI()
 
 origins = [
@@ -42,3 +43,8 @@ app.include_router(users.router)
 app.include_router(likes.router)
 app.include_router(subscription_router)
 app.include_router(digest_router)
+
+@app.on_event("startup")
+def startup_event():
+
+    start_scheduler()
