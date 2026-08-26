@@ -4,101 +4,131 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Profile | Resight</title>
+    <title>Profile | Resight</title>
 
-<link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="profile.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 </head>
+
 
 <body>
 
 <nav>
 
-        <h2 class="nav-logo">R</h2>
+    <h2 class="nav-logo">R</h2>
 
-        <ul>
+    <ul>
 
-            <li>Home</li>
-            <li>Artificial Intelligence</li>
-            <li>Robotics</li>
-            <li>Cybersecurity</li>
-            <li>Quantum</li>
-            <li>Bookmarks</li>
-            <li>Profile</li>
+        <li>Home</li>
+        <li>Artificial Intelligence</li>
+        <li>Robotics</li>
+        <li>Cybersecurity</li>
+        <li>Quantum</li>
+        <li>Bookmarks</li>
+        <li>Profile</li>
 
-        </ul>
+    </ul>
 
-    </nav>
+</nav>
 
 
 <div class="profile-container">
 
-<div class="profile-card">
+    <div class="profile-card">
 
-<div class="avatar">
+        <div class="avatar">
+            👤
+        </div>
 
-👤
+
+        <h1 id="username">Loading...</h1>
+
+        <p id="email">Loading...</p>
+
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <h2 id="bookmarkCount">0</h2>
+
+                <span>Bookmarks</span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <h2 id="likeCount">0</h2>
+
+                <span>Likes</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Subscription -->
+
+        <div class="subscription-section">
+
+            <h3>Email Digest</h3>
+
+            <p id="subscriptionStatus">
+                Checking subscription...
+            </p>
+
+            <button
+                id="subscriptionBtn"
+                type="button"
+            >
+                Subscribe
+            </button>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                onclick="location.href='bookmarks.html'"
+            >
+                My Bookmarks
+            </button>
+
+
+            <button
+                type="button"
+                onclick="location.href='likes.html'"
+            >
+                My Likes
+            </button>
+
+
+            <button
+                id="logoutBtn"
+                class="logout"
+                type="button"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
-<h1 id="username">Loading...</h1>
-
-<p id="email">Loading...</p>
-
-<div class="stats">
-
-<div class="stat">
-
-<h2 id="bookmarkCount">0</h2>
-
-<span>Bookmarks</span>
-
-</div>
-
-<div class="stat">
-
-<h2 id="likeCount">0</h2>
-
-<span>Likes</span>
-
-</div>
-
-</div>
-
-<div class="buttons">
-
-<button onclick="location.href='bookmarks.html'">
-
-My Bookmarks
-
-</button>
-
-<button onclick="location.href='likes.html'">
-
-My Likes
-
-</button>
-
-<button class="logout" onclick="logout()">
-
-Logout
-
-</button>
-
-</div>
-
-</div>
-
-</div>
 
 <script src="profile.js"></script>
 
