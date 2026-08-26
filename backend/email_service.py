@@ -18,7 +18,7 @@ def send_email(to_email, subject, body):
     message["To"] = to_email
     message["Subject"] = subject
 
-    message.set_content(body)
+    message.add_alternative(body, subtype="html")
 
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
 
