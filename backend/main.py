@@ -10,7 +10,7 @@ import psycopg2
 import auth
 import bookmarks
 import likes
-
+from subscription import router as subscription_router
 app = FastAPI()
 
 origins = [
@@ -39,3 +39,4 @@ app.include_router(auth.router)
 app.include_router(bookmarks.router)
 app.include_router(users.router)
 app.include_router(likes.router)
+app.include_router(subscription_router)
