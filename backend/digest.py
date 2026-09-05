@@ -7,10 +7,22 @@ from auth_handler import get_current_user
 from arxiv_service import fetch_papers
 from email_service import send_email
 
+
 router = APIRouter(
     prefix="/digest",
     tags=["Digest"]
 )
+
+
+# Research fields included in the digest
+DIGEST_FIELDS = {
+    "Artificial Intelligence": "artificial intelligence",
+    "Robotics": "robotics",
+    "Cybersecurity": "cybersecurity",
+    "Quantum Computing": "quantum computing",
+    "Software": "software engineering",
+    "Energy Tech": "renewable energy"
+}
 
 
 def create_digest_email(papers):
@@ -58,6 +70,15 @@ def create_digest_email(papers):
                 padding-bottom: 25px;
                 border-bottom: 1px solid #ddd;
             ">
+
+                <p style="
+                    color: #777;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                ">
+                    {paper["category"]}
+                </p>
 
                 <h2 style="
                     font-family: Georgia, serif;
@@ -124,9 +145,20 @@ def send_digest(
     current_user: models.User = Depends(get_current_user)
 ):
 
-    papers = fetch_papers("artificial intelligence")
+    all_papers = []
 
-    html_body = create_digest_email(papers)
+    # Fetch papers from every research field
+    for category, query in DIGEST_FIELDS.items():
+
+        papers = fetch_papers(query, max_results=2)
+
+        # Correct the category
+        for paper in papers:
+            paper["category"] = category
+
+        all_papers.extend(papers)
+
+    html_body = create_digest_email(all_papers)
 
     subscribers = db.query(models.User).filter(
         models.User.is_subscribed == True
@@ -143,5 +175,5 @@ def send_digest(
     return {
         "message": "Digest sent successfully",
         "subscribers": len(subscribers),
-        "papers": len(papers)
+        "papers": len(all_papers)
     }
