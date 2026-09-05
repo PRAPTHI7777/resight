@@ -9,7 +9,7 @@ from database import get_db
 
 from arxiv_service import fetch_papers
 
-from gemini_service import generate_summary
+from gemini_service import generate_summaries
 
 router = APIRouter(
     prefix="/articles",
@@ -38,7 +38,7 @@ def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)
 @router.get("/test-gemini")
 def test_gemini():
 
-    summary = generate_summary(
+    summary = generate_summaries(
         "Artificial Intelligence",
         "Artificial intelligence systems can learn patterns from large datasets and use those patterns to make predictions."
     )
