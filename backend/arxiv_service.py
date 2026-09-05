@@ -7,12 +7,12 @@ from gemini_service import generate_summaries
 BASE_URL = "http://export.arxiv.org/api/query"
 
 
-def fetch_papers(query: str = "artificial intelligence"):
+def fetch_papers(query: str = "artificial intelligence", max_results: int = 10):
 
     params = {
         "search_query": f"all:{query}",
         "start": 0,
-        "max_results": 10
+        "max_results": max_results
     }
 
     response = requests.get(
