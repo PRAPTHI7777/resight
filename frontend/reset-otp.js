@@ -15,19 +15,11 @@ otpForm.addEventListener("submit", async (event) => {
 
     try {
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/auth/verify-reset-otp?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`,
-            {
-                method: "POST"
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            message.textContent = data.detail;
-            return;
-        }
+        await window.apiRequest("/auth/verify-reset-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, otp })
+        });
 
         // OTP is correct
         sessionStorage.setItem("otpVerified", "true");
@@ -36,8 +28,7 @@ otpForm.addEventListener("submit", async (event) => {
 
     } catch (error) {
 
-        console.error(error);
-        message.textContent = "Something went wrong.";
+        message.textContent = error.message;
 
     }
 

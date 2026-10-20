@@ -9,36 +9,16 @@ signupForm.addEventListener("submit", async (event) => {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch(
-            "http://127.0.0.1:8000/auth/signup",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password
-                })
-            }
-        );
+        await window.apiRequest("/auth/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password })
+        });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            message.textContent = data.detail;
-            return;
-        }
-
-        // Save the email temporarily so the OTP page knows
-        // which account is being verified.
         sessionStorage.setItem("signupEmail", email);
-
-        window.location.href = "verify-otp.html";
+        window.location.href = "otp.html";
 
     } catch (error) {
-        console.error(error);
-        message.textContent = "Something went wrong.";
+        message.textContent = error.message;
     }
 });

@@ -1,19 +1,34 @@
+import logging
+
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:gryffy@localhost/postgres'
+from config import DATABASE_CONNECT_TIMEOUT_SECONDS, DATABASE_URL
 
-engine=create_engine(SQLALCHEMY_DATABASE_URL)
 
-SessionLocal=sessionmaker(autocommit=False,autoflush=False,bind=engine)
+logger = logging.getLogger(__name__)
 
-Base=declarative_base()
+try:
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        connect_args={"connect_timeout": DATABASE_CONNECT_TIMEOUT_SECONDS},
+    )
+except SQLAlchemyError as error:
+    logger.exception("Could not configure the database engine.")
+    raise RuntimeError(
+        "Database engine configuration failed. Check DATABASE_URL and ensure "
+        "the PostgreSQL driver is installed."
+    ) from error
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
 def get_db():
-    db=SessionLocal()
+    db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
-
-

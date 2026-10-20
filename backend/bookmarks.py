@@ -1,5 +1,6 @@
-from fastapi import APIRouter,Depends,HTTPException,status
+from fastapi import APIRouter,Depends,HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 import models,schemas
 from database import get_db
 from auth_handler import get_current_user
@@ -31,7 +32,14 @@ def add_bookmark(
         link=Bookmark.link
     )
     db.add(new_bookmark)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as error:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Bookmark already exists",
+        ) from error
     db.refresh(new_bookmark)
     return new_bookmark
     

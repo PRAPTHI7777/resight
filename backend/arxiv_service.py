@@ -1,13 +1,18 @@
 import requests
 import feedparser
 
+from config import ARXIV_TIMEOUT_SECONDS
 from gemini_service import generate_summaries
 
 
 BASE_URL = "http://export.arxiv.org/api/query"
 
 
-def fetch_papers(query: str = "artificial intelligence", max_results: int = 10):
+def fetch_papers(
+    query: str = "artificial intelligence",
+    max_results: int = 10,
+    category: str = "Artificial Intelligence",
+):
 
     params = {
         "search_query": f"all:{query}",
@@ -17,7 +22,8 @@ def fetch_papers(query: str = "artificial intelligence", max_results: int = 10):
 
     response = requests.get(
         BASE_URL,
-        params=params
+        params=params,
+        timeout=ARXIV_TIMEOUT_SECONDS,
     )
 
     response.raise_for_status()
@@ -27,18 +33,19 @@ def fetch_papers(query: str = "artificial intelligence", max_results: int = 10):
     papers = []
 
     for entry in feed.entries:
-
+        authors = [
+            author.get("name", "")
+            for author in entry.get("authors", [])
+            if author.get("name")
+        ]
         papers.append({
-            "id": entry.id,
-            "title": entry.title,
-            "abstract": entry.summary,
-            "authors": [
-                author.name
-                for author in entry.authors
-            ],
-            "date": entry.published,
-            "category": "Artificial Intelligence",
-            "link": entry.link
+            "id": entry.get("id") or entry.get("link", ""),
+            "title": entry.get("title", "Untitled paper"),
+            "abstract": entry.get("summary", ""),
+            "authors": authors,
+            "date": entry.get("published", ""),
+            "category": category,
+            "link": entry.get("link", ""),
         })
 
 
@@ -46,14 +53,8 @@ def fetch_papers(query: str = "artificial intelligence", max_results: int = 10):
 
     summaries = generate_summaries(papers)
 
-
-    # Replace abstract with Gemini summary
-
-    for i, paper in enumerate(papers):
-
-        paper["description"] = summaries[i]
-
-        del paper["abstract"]
-
+    for paper, summary in zip(papers, summaries):
+        paper["description"] = summary["summary"]
+        paper["summary_source"] = summary["source"]
 
     return papers

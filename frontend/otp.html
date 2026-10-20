@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify your email | Resight</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-page">
+  <form id="signupOtpForm" class="login-card">
+    <h2>Verify your email</h2>
+    <p>Enter the six-digit code sent to <span id="signupEmail"></span>.</p>
+    <input id="otp" type="text" class="login-input" inputmode="numeric"
+      pattern="[0-9]{6}" maxlength="6" placeholder="Enter OTP" required>
+    <button type="submit" class="login-btn">Verify email</button>
+    <button id="resendSignupOtp" type="button" class="login-btn">Resend code</button>
+    <p id="message" role="status"></p>
+    <p class="noacc"><a href="signup.html" class="signup-link">Back to signup</a></p>
+  </form>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="otp.js"></script>
+</body>
+</html>

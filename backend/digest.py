@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from html import escape
+import logging
+import requests
 from sqlalchemy.orm import Session
 
 import models
@@ -12,6 +15,7 @@ router = APIRouter(
     prefix="/digest",
     tags=["Digest"]
 )
+logger = logging.getLogger(__name__)
 
 
 # Research fields included in the digest
@@ -77,7 +81,7 @@ def create_digest_email(papers):
                     text-transform: uppercase;
                     letter-spacing: 1px;
                 ">
-                    {paper["category"]}
+                    {escape(str(paper["category"]))}
                 </p>
 
                 <h2 style="
@@ -85,14 +89,14 @@ def create_digest_email(papers):
                     font-size: 21px;
                     line-height: 1.4;
                 ">
-                    {paper["title"]}
+                    {escape(str(paper["title"]))}
                 </h2>
 
                 <p style="
                     color: #777;
                     font-size: 13px;
                 ">
-                    {", ".join(paper["authors"])}
+                    {escape(", ".join(paper["authors"]))}
                 </p>
 
                 <p style="
@@ -100,10 +104,10 @@ def create_digest_email(papers):
                     line-height: 1.7;
                     color: #333;
                 ">
-                    {paper["description"]}
+                    {escape(str(paper["description"]))}
                 </p>
 
-                <a href="{paper["link"]}"
+                <a href="{escape(str(paper["link"]), quote=True)}"
                    style="
                        display: inline-block;
                        margin-top: 10px;
@@ -145,18 +149,24 @@ def send_digest(
     current_user: models.User = Depends(get_current_user)
 ):
 
+    logger.info("Manual digest requested by user id %s.", current_user.id)
     all_papers = []
 
     # Fetch papers from every research field
-    for category, query in DIGEST_FIELDS.items():
+    try:
+        for category, query in DIGEST_FIELDS.items():
+            papers = fetch_papers(query, max_results=2)
 
-        papers = fetch_papers(query, max_results=2)
+            for paper in papers:
+                paper["category"] = category
 
-        # Correct the category
-        for paper in papers:
-            paper["category"] = category
-
-        all_papers.extend(papers)
+            all_papers.extend(papers)
+    except requests.RequestException as error:
+        logger.warning("arXiv digest fetch failed (%s).", type(error).__name__)
+        raise HTTPException(
+            status_code=502,
+            detail="The arXiv service is temporarily unavailable. Please try again.",
+        ) from error
 
     html_body = create_digest_email(all_papers)
 
