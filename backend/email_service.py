@@ -1,32 +1,30 @@
 import os
 import smtplib
-
 from email.message import EmailMessage
-from dotenv import load_dotenv
 
-load_dotenv()
+from config import SMTP_HOST, SMTP_PORT, SMTP_TIMEOUT_SECONDS
 
 
-SMTP_EMAIL = os.getenv("SMTP_EMAIL")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD") 
+def send_message(message: EmailMessage) -> None:
+    sender = os.getenv("SMTP_EMAIL", "").strip()
+    password = os.getenv("SMTP_PASSWORD", "").strip()
+    if not sender or not password:
+        raise RuntimeError("SMTP_EMAIL and SMTP_PASSWORD must be configured.")
 
-def send_email(to_email, subject, body):
+    message["From"] = sender
+    with smtplib.SMTP(
+        SMTP_HOST,
+        SMTP_PORT,
+        timeout=SMTP_TIMEOUT_SECONDS,
+    ) as server:
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(message)
 
+
+def send_email(to_email: str, subject: str, body: str) -> None:
     message = EmailMessage()
-
-    message["From"] = SMTP_EMAIL
     message["To"] = to_email
     message["Subject"] = subject
-
     message.add_alternative(body, subtype="html")
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-
-        server.starttls()
-
-        server.login(
-            SMTP_EMAIL,
-            SMTP_PASSWORD
-        )
-
-        server.send_message(message)
+    send_message(message)

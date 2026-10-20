@@ -1,271 +1,66 @@
 const token = sessionStorage.getItem("token");
-
-
-// ------------------------------------
-// Check Login
-// ------------------------------------
+const subscriptionStatus = document.getElementById("subscriptionStatus");
+const subscriptionBtn = document.getElementById("subscriptionBtn");
 
 if (!token) {
-
     window.location.href = "login.html";
-
 }
 
-
-// ------------------------------------
-// Load User Information
-// ------------------------------------
-
-async function loadUser() {
-
+async function loadProfile() {
     try {
-
-        const response = await fetch(
-            "http://127.0.0.1:8000/users/me",
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }
-        );
-
-
-        if (!response.ok) {
-
-            console.error("Could not load user");
-
-            sessionStorage.clear();
-
-            window.location.href = "login.html";
-
-            return;
-        }
-
-
-        const data = await response.json();
-
-
-        document.getElementById("username").textContent =
-            data.username;
-
-        document.getElementById("email").textContent =
-            data.email;
-
-
+        const [user, bookmarks, likes, subscription] = await Promise.all([
+            window.apiRequest("/users/me"),
+            window.apiRequest("/bookmarks/"),
+            window.apiRequest("/likes/"),
+            window.apiRequest("/subscription/status")
+        ]);
+        document.getElementById("username").textContent = user.username;
+        document.getElementById("email").textContent = user.email;
+        document.getElementById("bookmarkCount").textContent = bookmarks.length;
+        document.getElementById("likeCount").textContent = likes.length;
+        isSubscribed = subscription.is_subscribed;
+        updateSubscriptionUI();
     } catch (error) {
-
-        console.error("User loading error:", error);
-
+        subscriptionStatus.textContent = error.message;
+        if (error.statusCode === 401) {
+            sessionStorage.removeItem("token");
+            window.location.href = "login.html";
+        }
     }
-
 }
 
-
-// ------------------------------------
-// Logout
-// ------------------------------------
-
-document.getElementById("logoutBtn").addEventListener(
-    "click",
-    () => {
-
-        sessionStorage.clear();
-
-        window.location.href = "login.html";
-
-    }
-);
-
-
-// ------------------------------------
-// Subscription
-// ------------------------------------
-
-const subscriptionStatus =
-    document.getElementById("subscriptionStatus");
-
-const subscriptionBtn =
-    document.getElementById("subscriptionBtn");
-
+function updateSubscriptionUI() {
+    subscriptionStatus.textContent = isSubscribed
+        ? "You are subscribed to Resight digests."
+        : "You are not subscribed to Resight digests.";
+    subscriptionBtn.textContent = isSubscribed ? "Unsubscribe" : "Subscribe";
+}
 
 let isSubscribed = false;
 
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    sessionStorage.clear();
+    window.location.href = "login.html";
+});
 
-// ------------------------------------
-// Get Subscription Status
-// ------------------------------------
-
-async function loadSubscription() {
-
+subscriptionBtn.addEventListener("click", async () => {
+    subscriptionBtn.disabled = true;
+    const endpoint = isSubscribed
+        ? "/subscription/unsubscribe"
+        : "/subscription/subscribe";
     try {
-
-        const response = await fetch(
-            "http://127.0.0.1:8000/subscription/status",
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }
-        );
-
-
-        if (!response.ok) {
-
-            subscriptionStatus.textContent =
-                "Could not load subscription status.";
-
-            return;
-        }
-
-
-        const data = await response.json();
-
-
-        console.log(
-            "Subscription status:",
-            data
-        );
-
-
-        isSubscribed = data.is_subscribed;
-
-
+        const result = await window.apiRequest(endpoint, { method: "POST" });
+        isSubscribed = result.is_subscribed;
         updateSubscriptionUI();
-
-
     } catch (error) {
-
-        console.error(
-            "Subscription status error:",
-            error
-        );
-
-    }
-
-}
-
-
-// ------------------------------------
-// Update Subscription UI
-// ------------------------------------
-
-function updateSubscriptionUI() {
-
-    if (isSubscribed) {
-
-        subscriptionStatus.textContent =
-            "You are subscribed to Resight digests.";
-
-        subscriptionBtn.textContent =
-            "Unsubscribe";
-
-    } else {
-
-        subscriptionStatus.textContent =
-            "You are not subscribed to Resight digests.";
-
-        subscriptionBtn.textContent =
-            "Subscribe";
-
-    }
-
-}
-
-
-// ------------------------------------
-// Subscribe / Unsubscribe
-// ------------------------------------
-
-subscriptionBtn.addEventListener(
-    "click",
-    async () => {
-
-        const endpoint = isSubscribed
-            ? "/subscription/unsubscribe"
-            : "/subscription/subscribe";
-
-
-        console.log(
-            "Calling:",
-            endpoint
-        );
-
-
-        // Prevent multiple clicks while request is running
-
-        subscriptionBtn.disabled = true;
-
-
-        try {
-
-            const response = await fetch(
-                `http://127.0.0.1:8000${endpoint}`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                }
-            );
-
-
-            const data = await response.json();
-
-
-            console.log(
-                "Subscription response:",
-                data
-            );
-
-
-            if (!response.ok) {
-
-                console.error(
-                    "Subscription failed:",
-                    data
-                );
-
-                subscriptionStatus.textContent =
-                    "Something went wrong. Please try again.";
-
-                return;
-            }
-
-
-            // Get the actual state returned by backend
-
-            isSubscribed =
-                data.is_subscribed;
-
-
-            updateSubscriptionUI();
-
-
-        } catch (error) {
-
-            console.error(
-                "Subscription error:",
-                error
-            );
-
-            subscriptionStatus.textContent =
-                "Something went wrong. Please try again.";
-
-        } finally {
-
-            subscriptionBtn.disabled = false;
-
+        subscriptionStatus.textContent = error.message;
+        if (error.statusCode === 401) {
+            sessionStorage.removeItem("token");
+            window.location.href = "login.html";
         }
-
+    } finally {
+        subscriptionBtn.disabled = false;
     }
-);
+});
 
-
-// ------------------------------------
-// Start
-// ------------------------------------
-
-loadUser();
-
-loadSubscription();
+if (token) loadProfile();

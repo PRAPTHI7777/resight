@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List
+from pydantic import Field
 class ArticleBase(BaseModel):
     title: str
     description: str
@@ -23,7 +24,7 @@ class UserBase(BaseModel):
     email: str
 
 class UserCreate(UserBase):
-    password:str
+    password: str = Field(min_length=8)
 
 class UserResponse(UserBase):
     id:int
@@ -36,6 +37,17 @@ class UserResponse(UserBase):
 class UserLogin(BaseModel):
     email:str
     password:str
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetOtpVerificationRequest(BaseModel):
+    email: str
+    otp: str = Field(pattern=r"^\d{6}$")
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    new_password: str = Field(min_length=8)
 
 class BookmarkCreate(BaseModel):
     article_id: str

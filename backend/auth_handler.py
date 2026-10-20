@@ -8,9 +8,9 @@ from fastapi import Depends
 from database import get_db
 
 from fastapi.security import OAuth2PasswordBearer
-oauth2_scheme=OAuth2PasswordBearer(tokenUrl="/auth/login")
+from config import JWT_SECRET_KEY
 
-SECRET_KEY = "REDACTED_JWT_SECRET"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -25,7 +25,7 @@ def create_access_token(data: dict):
 
     encoded_jwt = jwt.encode(
         to_encode,
-        SECRET_KEY,
+        JWT_SECRET_KEY,
         algorithm=ALGORITHM
     )
 
@@ -36,7 +36,7 @@ def verify_token(token: str):
         # Decode and verify the JWT using our secret key
         payload = jwt.decode(
             token,
-            SECRET_KEY,
+            JWT_SECRET_KEY,
             algorithms=[ALGORITHM]
         )
 

@@ -23,19 +23,11 @@ resetForm.addEventListener("submit", async (event) => {
 
     try {
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/auth/reset-password?email=${encodeURIComponent(email)}&new_password=${encodeURIComponent(newPassword)}`,
-            {
-                method: "POST"
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            message.textContent = data.detail;
-            return;
-        }
+        await window.apiRequest("/auth/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, new_password: newPassword })
+        });
 
         message.textContent = "Password reset successfully!";
 
@@ -48,8 +40,7 @@ resetForm.addEventListener("submit", async (event) => {
 
     } catch (error) {
 
-        console.error(error);
-        message.textContent = "Something went wrong.";
+        message.textContent = error.message;
 
     }
 

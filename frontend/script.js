@@ -1,185 +1,5 @@
-//Fetch data from local JSON file and render it to HTML document by using Vanilla JavaScript
-const container=document.querySelector('.contain');
-
-function renderCharacters(data){
-    container.innerHTML = '';
-    
-    data.forEach(item => {
-        console.log(item.id);
-        // 1. Structural Elements
-        const itemDiv = document.createElement('div');
-        const pict = document.createElement('div');
-        const verticle = document.createElement('div');
-        const footerRow = document.createElement("div"); 
-        const actionsGroup = document.createElement("div");
-        
-        // 2. Data Content Elements
-        const titleDiv = document.createElement('div');
-        const authorDiv = document.createElement('div');
-        const summaryDiv = document.createElement('div');
-        const dateDiv = document.createElement('div');
-        const categoryDiv = document.createElement('div');
-        
-        // 3. Like Button (Configured with an Image instead of text)
-        const likeBtn = document.createElement("button");
-        likeBtn.className = "like-btn";
-        
-        const likeImg = document.createElement("img");
-        likeImg.src = 'icons\\like1.png'; // Your default unliked image
-        likeImg.alt = "like";
-        likeImg.style.width = "45px";
-        likeImg.style.height = "40px";
-        likeBtn.appendChild(likeImg);
-        
-        // 4. Bookmark Button
-        const bookmarkBtn = document.createElement("button");
-        bookmarkBtn.className = "bookmark-btn";
-        
-        const bookmarkImg = document.createElement("img");
-        bookmarkImg.src = 'icons\\bookmrk1.png'; // Your default unbookmarked image
-        bookmarkImg.alt = "Bookmark button";
-        bookmarkImg.style.width = "20px";
-        bookmarkImg.style.height = "25px";
-        bookmarkBtn.appendChild(bookmarkImg);
-        
-        //Read BTN
-        const readBtn = document.createElement("button");
-        readBtn.className = "read-btn";
-        readBtn.textContent = "Read More";
-
-
-        // 5. Apply CSS Classes
-        itemDiv.className = 'container';
-        pict.className = 'picture';
-        verticle.className = 'verticalcontain';
-        actionsGroup.className = "actions-group";
-        footerRow.className = 'footer-row'; 
-        titleDiv.className = 'title';
-        authorDiv.className = 'authors';
-        summaryDiv.className = 'summary';
-        dateDiv.className = 'date';
-        categoryDiv.className = 'category';
-
-        // 6. Populate Text Content
-        titleDiv.textContent = item.title || "No Title";
-        
-        if (Array.isArray(item.authors)) {
-            authorDiv.textContent = '- ' + item.authors.join(', ');
-        } else {
-            authorDiv.textContent = '- Unknown Author';
-        }
-        
-        summaryDiv.textContent = item.description || "No Description";
-        dateDiv.textContent = item.date || "Unknown Date";
-        categoryDiv.textContent = item.category || "Unknown Category";
-
-        // 7. Event Listeners (Image Toggle Logic)
-        /*likeBtn.addEventListener("click", () => {
-            // Checks if the file path contains your default file name
-            if (likeImg.src.includes('likebtn1.jpg')) {
-                likeImg.src = 'icons/likebtn2.jpg'; // Swaps to active state image
-            } else {
-                likeImg.src = 'icons/likebtn1.jpg'; // Swaps back
-            }
-        });*/
-
-        bookmarkBtn.addEventListener("click",async () => {
-            const token = sessionStorage.getItem("token");
-
-            if (!token) {
-            alert("Please login to bookmark papers.");
-            window.location.href = "login.html";
-            return;
-           }
-  const response = await fetch("http://127.0.0.1:8000/bookmarks", {
-    method: "POST",
-    headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        article_id: item.id,
-        title: item.title,
-        authors: item.authors,
-        summary: item.description,
-        link: item.link
-    })
-});
-
-if(response.ok){
-     if (bookmarkImg.src.includes('1.png')) {
-    bookmarkImg.src = 'icons\\bookmrk2.png';
-} else {
-    bookmarkImg.src = 'icons\\bookmrk1.png';
-}
-}
-    });
-    readBtn.addEventListener("click", () => {
-    console.log("Read More Clicked!!");
-    sessionStorage.setItem(
-        "selectedPaper",
-        JSON.stringify(item)
-    );
-
-    window.location.href = "paper.html";
-});
-
-likeBtn.addEventListener("click",async () => {
-            const token = sessionStorage.getItem("token");
-
-            if (!token) {
-            alert("Please login to like papers.");
-            window.location.href = "login.html";
-            return;
-           }
-  const response = await fetch("http://127.0.0.1:8000/likes", {
-    method: "POST",
-    headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        article_id: item.id,
-        title: item.title,
-        authors: item.authors,
-        summary: item.description,
-        link: item.link
-    })
-});
-
-if(response.ok){
-     if (likeImg.src.includes('icons\like1.png')) {
-    likeImg.src = 'icons\like2.png';
-} else {
-    likeImg.src = 'icons\like1.png';
-}
-}
-    });
-
-        // 8. Assemble DOM Tree
-        verticle.appendChild(titleDiv);
-        verticle.appendChild(authorDiv);
-        verticle.appendChild(summaryDiv);
-
-        // Group the buttons side-by-side
-        actionsGroup.appendChild(likeBtn);
-        actionsGroup.appendChild(bookmarkBtn);
-        actionsGroup.appendChild(readBtn);
-        // Add metadata and buttons to the single horizontal row
-        footerRow.appendChild(dateDiv);
-        footerRow.appendChild(categoryDiv);
-        footerRow.appendChild(actionsGroup);
-        
-        verticle.appendChild(footerRow);
-
-        itemDiv.appendChild(pict);
-        itemDiv.appendChild(verticle);
-        
-        container.appendChild(itemDiv);
-    });
-}
-
-
+const container = document.querySelector(".contain");
+const feedMessage = document.getElementById("feedMessage");
 
 const searchQueries = {
     "All": "artificial intelligence",
@@ -191,92 +11,182 @@ const searchQueries = {
     "Energy Tech": "renewable energy"
 };
 
-
-function fetchArticles(category) {
-    let url="http://127.0.0.1:8000/articles/live";
-    const query = searchQueries[category];
-
-if (category !== "All") {
-    url = `http://127.0.0.1:8000/articles/live?query=${encodeURIComponent(query)}`;
-} 
-fetch(url)
-    .then(res => res.json())
-    .then(data =>renderCharacters(data))
-    .catch(error => console.error('Error fetching data:', error));
+function makeButton(label, className, imagePath, imageAlt) {
+    const button = document.createElement("button");
+    button.className = className;
+    const image = document.createElement("img");
+    image.src = imagePath;
+    image.alt = imageAlt;
+    button.appendChild(image);
+    return { button, image };
 }
 
-function onCategoryClick(category){
-    sessionStorage.setItem("category",category);
+function showFeedError(message) {
+    feedMessage.textContent = message;
+}
+
+function renderCharacters(papers) {
+    container.replaceChildren();
+    for (const paper of papers) {
+        const card = document.createElement("div");
+        card.className = "container";
+
+        const picture = document.createElement("div");
+        picture.className = "picture";
+
+        const content = document.createElement("div");
+        content.className = "verticalcontain";
+
+        const title = document.createElement("div");
+        title.className = "title";
+        title.textContent = paper.title || "No Title";
+
+        const authors = document.createElement("div");
+        authors.className = "authors";
+        authors.textContent = Array.isArray(paper.authors)
+            ? `- ${paper.authors.join(", ")}`
+            : "- Unknown Author";
+
+        const summary = document.createElement("div");
+        summary.className = "summary";
+        summary.textContent = paper.description || "No Description";
+
+        const fallbackNote = document.createElement("small");
+        fallbackNote.textContent = paper.summary_source === "abstract_fallback"
+            ? "Abstract-based fallback summary"
+            : "";
+
+        const footer = document.createElement("div");
+        footer.className = "footer-row";
+        const date = document.createElement("div");
+        date.className = "date";
+        date.textContent = paper.date || "Unknown Date";
+        const category = document.createElement("div");
+        category.className = "category";
+        category.textContent = paper.category || "Unknown Category";
+        const actions = document.createElement("div");
+        actions.className = "actions-group";
+
+        const like = makeButton("Like", "like-btn", "icons/like1.png", "Like");
+        const bookmark = makeButton(
+            "Bookmark",
+            "bookmark-btn",
+            "icons/bookmrk1.png",
+            "Bookmark"
+        );
+        const read = document.createElement("button");
+        read.className = "read-btn";
+        read.textContent = "Read More";
+        read.addEventListener("click", () => {
+            sessionStorage.setItem("selectedPaper", JSON.stringify(paper));
+            window.location.href = "paper.html";
+        });
+
+        like.button.addEventListener("click", async () => {
+            if (!sessionStorage.getItem("token")) {
+                window.location.href = "login.html";
+                return;
+            }
+            try {
+                await window.apiRequest("/likes/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        article_id: paper.id,
+                        title: paper.title,
+                        authors: paper.authors || [],
+                        summary: paper.description || "",
+                        link: paper.link
+                    })
+                });
+                like.image.src = "icons/like2.png";
+                like.button.disabled = true;
+                showFeedError("Paper added to your likes.");
+            } catch (error) {
+                showFeedError(error.message);
+            }
+        });
+
+        bookmark.button.addEventListener("click", async () => {
+            if (!sessionStorage.getItem("token")) {
+                window.location.href = "login.html";
+                return;
+            }
+            try {
+                await window.apiRequest("/bookmarks/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        article_id: paper.id,
+                        title: paper.title,
+                        authors: paper.authors || [],
+                        summary: paper.description || "",
+                        link: paper.link
+                    })
+                });
+                bookmark.image.src = "icons/bookmrk2.png";
+                bookmark.button.disabled = true;
+                showFeedError("Paper added to your bookmarks.");
+            } catch (error) {
+                showFeedError(error.message);
+            }
+        });
+
+        actions.append(like.button, bookmark.button, read);
+        footer.append(date, category, actions);
+        content.append(title, authors, summary, fallbackNote, footer);
+        card.append(picture, content);
+        container.appendChild(card);
+    }
+}
+
+async function fetchArticles(category) {
+    const query = searchQueries[category] || category || searchQueries.All;
+    const url = `/articles/live?query=${encodeURIComponent(query)}`;
+    showFeedError("Loading papers...");
+    try {
+        const papers = await window.apiRequest(url);
+        if (!Array.isArray(papers)) {
+            throw new Error("The research feed returned an invalid response.");
+        }
+        renderCharacters(papers);
+        showFeedError(papers.length ? "" : "No papers were found.");
+    } catch (error) {
+        showFeedError(error.message);
+    }
+}
+
+function onCategoryClick(category) {
+    sessionStorage.setItem("category", category);
     fetchArticles(category);
 }
 
-// Used by the nav bar links (e.g. "Artificial Intelligence", "Robotics")
-// so clicking them filters the feed the same way the dropdown does.
-function filterByCategory(category){
+function filterByCategory(category) {
     sessionStorage.setItem("category", category);
     const dropdown = document.getElementById("categoryselect");
-    if (dropdown) dropdown.value = category; // keep dropdown in sync
+    if (dropdown) dropdown.value = category;
     fetchArticles(category);
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
-    const savedCategory=sessionStorage.getItem("category");
-    const dropdown=document.getElementById("categoryselect");
-    if(savedCategory){
-        dropdown.value=savedCategory;
-        fetchArticles(savedCategory);
-    }else{
-        fetchArticles("All");
-    }
-});
-
-
 document.addEventListener("DOMContentLoaded", () => {
-
+    const dropdown = document.getElementById("categoryselect");
+    const savedCategory = sessionStorage.getItem("category") || "All";
+    if (dropdown) dropdown.value = savedCategory;
     const searchInput = document.getElementById("searchInput");
-
-    console.log("search input:", searchInput);
-
-    if (!searchInput) {
-        console.log("Search input not found!");
-        return;
+    const savedQuery = sessionStorage.getItem("searchQuery");
+    if (savedQuery && searchInput) {
+        searchInput.value = savedQuery;
+        sessionStorage.removeItem("searchQuery");
+        fetchArticles(savedQuery);
+    } else {
+        fetchArticles(savedCategory);
     }
 
-    searchInput.addEventListener("keydown", async function(event) {
-
-        if (event.key !== "Enter") {
-            return;
-        }
-
-        const query = searchInput.value.trim();
-
-        console.log("SEARCH:", query);
-
-        if (query === "") {
-            return;
-        }
-
-        const url =
-            `http://127.0.0.1:8000/articles/live?query=${encodeURIComponent(query)}`;
-
-        try {
-
-            const response = await fetch(url);
-
-            console.log("Response:", response.status);
-
-            const data = await response.json();
-
-            console.log("Results:", data);
-
-            renderCharacters(data);
-
-        } catch (error) {
-
-            console.error("Search error:", error);
-
-        }
-
-    });
-
+    if (searchInput) {
+        searchInput.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter") return;
+            const query = searchInput.value.trim();
+            if (query) fetchArticles(query);
+        });
+    }
 });

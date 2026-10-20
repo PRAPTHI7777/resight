@@ -9,19 +9,11 @@ forgotForm.addEventListener("submit", async (event) => {
 
     try {
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/auth/forgot-password?email=${encodeURIComponent(email)}`,
-            {
-                method: "POST"
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            message.textContent = data.detail;
-            return;
-        }
+        await window.apiRequest("/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
 
         // Remember which email is being reset
         sessionStorage.setItem("resetEmail", email);
@@ -31,8 +23,7 @@ forgotForm.addEventListener("submit", async (event) => {
 
     } catch (error) {
 
-        console.error(error);
-        message.textContent = "Something went wrong.";
+        message.textContent = error.message;
 
     }
 });

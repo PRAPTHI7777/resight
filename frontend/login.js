@@ -10,20 +10,15 @@ form.addEventListener("submit", async function (event) {
     formData.append("username", email);
     formData.append("password", password);
 
-    const response = await fetch("http://127.0.0.1:8000/auth/login", {
-        method: "POST",
-        body: formData
-    });
-
-    const data = await response.json();
-
-    console.log(response.status);
-    console.log(data);
-
-    if (response.ok) {
+    const message = document.getElementById("message");
+    try {
+        const data = await window.apiRequest("/auth/login", {
+            method: "POST",
+            body: formData
+        });
         sessionStorage.setItem("token", data.access_token);
         window.location.href = "index.html";
-    } else {
-        document.getElementById("message").innerText = data.detail;
+    } catch (error) {
+        message.textContent = error.message;
     }
 });
