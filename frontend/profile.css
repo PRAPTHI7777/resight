@@ -1,232 +1,30 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-body{
-
-font-family:"Inter",sans-serif;
-
-background:white;
-
-background-size:cover;
-
-background-position:center;
-
-background-attachment:fixed;
-
-min-height:100vh;
-
-color:black;
-
-}
-
-nav{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:25px 80px;
-
-}
-
-.logo{
-
-font-family:"Playfair Display",serif;
-
-font-size:40px;
-
-}
-
-nav ul{
-
-display:flex;
-
-gap:35px;
-
-list-style:none;
-
-}
-
-nav a{
-
-color:white;
-
-text-decoration:none;
-
-}
-
-.profile-container{
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-height:85vh;
-
-}
-
-.profile-card{
-
-width:550px;
-
-padding:60px;
-
-border-radius:35px;
-
-
-
-backdrop-filter:blur(16px);
-
-text-align:center;
-
-box-shadow:0 20px 40px rgba(0,0,0,.35);
-
-}
-
-.avatar{
-
-width:120px;
-
-height:120px;
-
-border-radius:50%;
-
-background:black;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:55px;
-
-margin:auto;
-
-margin-bottom:25px;
-
-}
-
-#username{
-
-font-size:40px;
-
-font-family:"Playfair Display",serif;
-
-}
-
-#email{
-
-margin-top:8px;
-
-opacity:.8;
-
-}
-
-.stats{
-
-display:flex;
-
-justify-content:space-around;
-
-margin-top:45px;
-
-margin-bottom:45px;
-
-}
-
-.stat h2{
-
-font-size:40px;
-
-color:#f5d6bf;
-
-}
-
-.stat span{
-
-opacity:.8;
-
-}
-
-.buttons{
-
-display:flex;
-
-flex-direction:column;
-
-gap:18px;
-
-}
-
-button{
-
-height:55px;
-
-border:none;
-
-border-radius:30px;
-
-background:black;
-
-color:white;
-
-font-size:16px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-background:#6b2216;
-
-transform:translateY(-2px);
-
-}
-
-.logout{
-
-background:#444;
-
-}
-
-.logout:hover{
-
-background:#222;
-
-}
-
-.subscription-section {
-    margin: 25px 0;
-    padding: 18px;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-.subscription-section h3 {
-    margin-bottom: 8px;
-}
-
-.subscription-section p {
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-#subscriptionBtn {
-    padding: 10px 25px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-}
+body { margin:0; color:#171916; background:#f6f1e7; font-family:"DM Sans",Arial,sans-serif; }
+.issue-ribbon { min-height:30px; padding:7px clamp(18px,4vw,58px); display:flex; justify-content:space-between; gap:16px; background:#171916; color:#f6f1e7; font:10px "DM Mono",monospace; letter-spacing:.06em; }
+.site-header { min-height:82px; padding:14px clamp(18px,4vw,58px); display:flex; align-items:center; justify-content:space-between; gap:22px; background:#f6f1e7; border-bottom:1px solid #d9d2c6; }
+.site-header .nav-logo { display:inline-flex; align-items:center; color:#171916; font:800 27px "Playfair Display",Georgia,serif; letter-spacing:-.06em; text-decoration:none; white-space:nowrap; }
+.site-header .logo-mark { width:31px; height:31px; margin-right:9px; display:inline-grid; place-items:center; background:#2856d8; color:white; font:700 19px "Playfair Display",Georgia,serif; transform:rotate(-7deg); }
+.site-header .logo-period { color:#e44a36; }
+.site-header nav { display:flex; flex-wrap:wrap; gap:10px clamp(12px,2vw,27px); }
+.site-header nav a { color:#171916; font-size:12px; font-weight:700; text-decoration:none; }
+.site-header nav a:hover,.site-header nav a.active { color:#2856d8; }
+.site-header nav { position:static; z-index:auto; padding:0; border:0; background:transparent; }
+.profile-container { min-height:calc(100vh - 170px); padding:52px 20px 75px; display:flex; justify-content:center; align-items:flex-start; }
+.profile-card { width:min(100%,650px); padding:clamp(26px,5vw,48px); background:#fffdf8; border:1px solid #d9d2c6; border-top:5px solid #315d46; box-shadow:10px 10px 0 #f2d85b; text-align:left; }
+.profile-card > .eyebrow { margin:0 0 22px; color:#e44a36; font:10px "DM Mono",monospace; letter-spacing:.12em; }
+.avatar { width:72px; height:72px; margin:0 0 20px; display:grid; place-items:center; border-radius:50%; background:#2856d8; color:#fff; font:700 32px "Playfair Display",Georgia,serif; }
+#username { margin:0; color:#171916; font:700 clamp(32px,5vw,46px)/1.1 "Playfair Display",Georgia,serif; }
+#email { margin:8px 0 0; color:#65665e; font-size:13px; }
+.stats { margin:30px 0; padding:20px 0; display:flex; gap:55px; border-top:1px solid #d9d2c6; border-bottom:1px solid #d9d2c6; }
+.stat h2 { margin:0; color:#2856d8; font:700 34px "Playfair Display",Georgia,serif; }
+.stat span { color:#65665e; font:10px "DM Mono",monospace; text-transform:uppercase; }
+.subscription-section { margin:0 0 24px; padding:18px 0; border-bottom:1px solid #d9d2c6; text-align:left; }
+.subscription-section h3 { margin:0 0 8px; font:700 22px "Playfair Display",Georgia,serif; }
+.subscription-section p { margin:0 0 14px; color:#65665e; font-size:12px; line-height:1.6; }
+.profile-card button { min-height:42px; padding:0 15px; border:0; background:#2856d8; color:white; font-size:11px; font-weight:700; cursor:pointer; }
+.profile-card button:hover { background:#171916; }
+.profile-card button:disabled { opacity:.6; cursor:wait; }
+.buttons { display:flex; flex-wrap:wrap; gap:10px; }
+.buttons button { min-height:42px; }
+.buttons .logout { margin-left:auto; background:#e44a36; }
+.buttons .logout:hover { background:#171916; }
+@media(max-width:700px){.issue-ribbon span:nth-child(2){display:none}.site-header{align-items:flex-start;flex-direction:column}.site-header nav{gap:10px 17px}.site-header nav a{font-size:11px}.profile-container{padding:28px 16px 50px}.profile-card{box-shadow:6px 6px 0 #f2d85b}.stats{gap:35px}}

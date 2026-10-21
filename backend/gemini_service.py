@@ -10,17 +10,19 @@ from config import GEMINI_TIMEOUT_MILLISECONDS
 
 logger = logging.getLogger(__name__)
 MODEL_NAME = "gemini-2.5-flash"
+SUMMARY_WORD_LIMIT = 60
+
+
+def _limit_words(summary: str) -> str:
+    return " ".join(summary.split()[:SUMMARY_WORD_LIMIT])
 
 
 def _fallback(paper: dict) -> dict[str, str]:
     abstract = str(paper.get("abstract") or "").strip()
     if not abstract:
         abstract = "No abstract was provided by arXiv."
-    elif len(abstract) > 600:
-        abstract = abstract[:597].rstrip() + "..."
-
     return {
-        "summary": f"Abstract-based fallback: {abstract}",
+        "summary": _limit_words(abstract),
         "source": "abstract_fallback",
     }
 
@@ -92,7 +94,7 @@ Papers:
             and summary.strip()
         ):
             summaries[index] = {
-                "summary": summary.strip(),
+                "summary": _limit_words(summary.strip()),
                 "source": "gemini",
             }
 

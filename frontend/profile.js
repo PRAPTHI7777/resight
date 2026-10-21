@@ -16,6 +16,8 @@ async function loadProfile() {
         ]);
         document.getElementById("username").textContent = user.username;
         document.getElementById("email").textContent = user.email;
+        document.getElementById("profileInitial").textContent =
+            String(user.username || "R").trim().charAt(0).toUpperCase() || "R";
         document.getElementById("bookmarkCount").textContent = bookmarks.length;
         document.getElementById("likeCount").textContent = likes.length;
         isSubscribed = subscription.is_subscribed;

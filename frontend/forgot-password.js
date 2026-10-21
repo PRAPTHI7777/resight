@@ -5,6 +5,9 @@ forgotForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
+    const submit = forgotForm.querySelector("button[type='submit']");
+    submit.disabled = true;
+    submit.textContent = "Sending code...";
     const email = document.getElementById("email").value.trim();
 
     try {
@@ -25,5 +28,8 @@ forgotForm.addEventListener("submit", async (event) => {
 
         message.textContent = error.message;
 
+    } finally {
+        submit.disabled = false;
+        submit.textContent = "Send OTP";
     }
 });

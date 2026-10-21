@@ -1,44 +1,65 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Paper</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f6f1e7">
+    <title>Research Paper | ReSight</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-
-<body>
-
-<div class="paper-container">
-
-    <h1 id="title"></h1>
-
-    <div class="paper-meta">
-        <p id="authors"></p>
-        <p id="date"></p>
-        <p id="category"></p>
-    </div>
-
-    <hr>
-
-    <h2>Summary</h2>
-    <p id="summary"></p>
-    <p id="summarySource"></p>
-
-    <hr>
-
-    <h2>Abstract</h2>
-    <p id="description"></p>
-
-    <a id="paperLink" target="_blank">
-        Read Original Paper →
-    </a>
-
-</div>
-
-<script src="config.js"></script>
-<script src="api.js"></script>
-<script src="paper.js"></script>
-
+<body class="paper-page">
+    <div class="issue-ribbon"><span>THE RESEARCH READER</span><span>READ THE SOURCE</span><span>FIELD NOTE / DETAIL</span></div>
+    <header class="site-header">
+        <a class="nav-logo" href="home.html"><span class="logo-mark" aria-hidden="true">R</span>ReSight<span class="logo-period">.</span></a>
+        <nav aria-label="Main navigation">
+            <a href="home.html">Journal</a>
+            <a href="index.html">Explore papers</a>
+            <a href="bookmarks.html">Reading list</a>
+            <a href="profile.html">Profile</a>
+        </nav>
+    </header>
+    <main>
+        <article class="paper-container" aria-busy="true">
+            <a class="paper-back" href="index.html">← Back to the index</a>
+            <p id="category" class="paper-topic"></p>
+            <h1 id="title">Opening the paper…</h1>
+            <div class="paper-meta">
+                <p id="authors"></p>
+                <p id="date"></p>
+            </div>
+            <div class="paper-toolbar">
+                <div class="paper-actions">
+                    <button id="likePaper" class="like-btn" type="button" aria-label="Like paper" aria-pressed="false"><img src="icons/like1.png" alt=""></button>
+                    <button id="bookmarkPaper" class="bookmark-btn" type="button" aria-label="Bookmark paper" aria-pressed="false"><img src="icons/bookmrk1.png" alt=""></button>
+                </div>
+                <a id="paperLink" class="original-link" target="_blank" rel="noopener noreferrer">Read original on arXiv ↗</a>
+            </div>
+            <section class="paper-summary-block">
+                <p class="eyebrow">THE SHORT VERSION</p>
+                <p id="summary">Loading the concise summary…</p>
+                <small id="summarySource" class="summary-source"></small>
+            </section>
+            <section class="paper-abstract-block">
+                <p class="eyebrow">FROM THE SOURCE</p>
+                <h2>Abstract</h2>
+                <p id="description"></p>
+            </section>
+            <p id="paperMessage" class="page-message" role="status" aria-live="polite"></p>
+        </article>
+        <section class="related-section">
+            <div class="section-head">
+                <div><p class="eyebrow">ANOTHER THREAD TO FOLLOW</p><h2>Related research<span class="blue-period">.</span></h2></div>
+            </div>
+            <div id="relatedPapers" class="related-grid" aria-busy="true"><p class="loading-copy">Looking for related papers…</p></div>
+        </section>
+    </main>
+    <footer class="site-footer"><a class="nav-logo" href="home.html">ReSight<span class="logo-period">.</span></a><span>Research, read with curiosity.</span><a href="index.html">Explore the feed ↗</a></footer>
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="paper.js"></script>
 </body>
-
 </html>

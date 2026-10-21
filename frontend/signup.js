@@ -3,9 +3,12 @@ const message = document.getElementById("message");
 
 signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const submit = signupForm.querySelector("button[type='submit']");
+    submit.disabled = true;
+    submit.textContent = "Creating account...";
 
-    const username = document.getElementById("username").value;
-    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
     try {
@@ -20,5 +23,8 @@ signupForm.addEventListener("submit", async (event) => {
 
     } catch (error) {
         message.textContent = error.message;
+    } finally {
+        submit.disabled = false;
+        submit.textContent = "Sign Up";
     }
 });

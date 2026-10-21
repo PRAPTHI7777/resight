@@ -1,192 +1,245 @@
 const container = document.querySelector(".contain");
 const feedMessage = document.getElementById("feedMessage");
-
+const resultCount = document.getElementById("resultCount");
 const searchQueries = {
-    "All": "artificial intelligence",
+    "All": "",
     "Artificial Intelligence": "artificial intelligence",
+    "Neuroscience": "neuroscience",
     "Robotics": "robotics",
+    "Computer Vision": "computer vision",
     "Cybersecurity": "cybersecurity",
     "Quantum Computing": "quantum computing",
     "Software": "software engineering",
     "Energy Tech": "renewable energy"
 };
+let savedLikes = new Map();
+let savedBookmarks = new Map();
+let activeQuery = "";
 
-function makeButton(label, className, imagePath, imageAlt) {
-    const button = document.createElement("button");
-    button.className = className;
-    const image = document.createElement("img");
-    image.src = imagePath;
-    image.alt = imageAlt;
-    button.appendChild(image);
-    return { button, image };
-}
-
-function showFeedError(message) {
+function setStatus(message, isError = false) {
     feedMessage.textContent = message;
+    feedMessage.classList.toggle("is-error", isError);
 }
 
-function renderCharacters(papers) {
-    container.replaceChildren();
-    for (const paper of papers) {
-        const card = document.createElement("div");
-        card.className = "container";
+function createActionButton({ label, selected, icon, kind }) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `${kind}-btn${selected ? " is-selected" : ""}`;
+    button.setAttribute("aria-label", label);
+    button.setAttribute("aria-pressed", String(selected));
+    const image = document.createElement("img");
+    image.src = icon;
+    image.alt = "";
+    image.setAttribute("aria-hidden", "true");
+    button.appendChild(image);
+    return button;
+}
 
-        const picture = document.createElement("div");
-        picture.className = "picture";
-
-        const content = document.createElement("div");
-        content.className = "verticalcontain";
-
-        const title = document.createElement("div");
-        title.className = "title";
-        title.textContent = paper.title || "No Title";
-
-        const authors = document.createElement("div");
-        authors.className = "authors";
-        authors.textContent = Array.isArray(paper.authors)
-            ? `- ${paper.authors.join(", ")}`
-            : "- Unknown Author";
-
-        const summary = document.createElement("div");
-        summary.className = "summary";
-        summary.textContent = paper.description || "No Description";
-
-        const fallbackNote = document.createElement("small");
-        fallbackNote.textContent = paper.summary_source === "abstract_fallback"
-            ? "Abstract-based fallback summary"
-            : "";
-
-        const footer = document.createElement("div");
-        footer.className = "footer-row";
-        const date = document.createElement("div");
-        date.className = "date";
-        date.textContent = paper.date || "Unknown Date";
-        const category = document.createElement("div");
-        category.className = "category";
-        category.textContent = paper.category || "Unknown Category";
-        const actions = document.createElement("div");
-        actions.className = "actions-group";
-
-        const like = makeButton("Like", "like-btn", "icons/like1.png", "Like");
-        const bookmark = makeButton(
-            "Bookmark",
-            "bookmark-btn",
-            "icons/bookmrk1.png",
-            "Bookmark"
-        );
-        const read = document.createElement("button");
-        read.className = "read-btn";
-        read.textContent = "Read More";
-        read.addEventListener("click", () => {
-            sessionStorage.setItem("selectedPaper", JSON.stringify(paper));
-            window.location.href = "paper.html";
-        });
-
-        like.button.addEventListener("click", async () => {
-            if (!sessionStorage.getItem("token")) {
-                window.location.href = "login.html";
-                return;
-            }
-            try {
-                await window.apiRequest("/likes/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        article_id: paper.id,
-                        title: paper.title,
-                        authors: paper.authors || [],
-                        summary: paper.description || "",
-                        link: paper.link
-                    })
-                });
-                like.image.src = "icons/like2.png";
-                like.button.disabled = true;
-                showFeedError("Paper added to your likes.");
-            } catch (error) {
-                showFeedError(error.message);
-            }
-        });
-
-        bookmark.button.addEventListener("click", async () => {
-            if (!sessionStorage.getItem("token")) {
-                window.location.href = "login.html";
-                return;
-            }
-            try {
-                await window.apiRequest("/bookmarks/", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        article_id: paper.id,
-                        title: paper.title,
-                        authors: paper.authors || [],
-                        summary: paper.description || "",
-                        link: paper.link
-                    })
-                });
-                bookmark.image.src = "icons/bookmrk2.png";
-                bookmark.button.disabled = true;
-                showFeedError("Paper added to your bookmarks.");
-            } catch (error) {
-                showFeedError(error.message);
-            }
-        });
-
-        actions.append(like.button, bookmark.button, read);
-        footer.append(date, category, actions);
-        content.append(title, authors, summary, fallbackNote, footer);
-        card.append(picture, content);
-        container.appendChild(card);
+async function toggleSavedPaper(button, paper, collection, endpoint, kind) {
+    if (!sessionStorage.getItem("token")) {
+        sessionStorage.setItem("redirectAfterLogin", "index.html");
+        window.location.href = "login.html";
+        return;
     }
-}
-
-async function fetchArticles(category) {
-    const query = searchQueries[category] || category || searchQueries.All;
-    const url = `/articles/live?query=${encodeURIComponent(query)}`;
-    showFeedError("Loading papers...");
+    button.disabled = true;
     try {
-        const papers = await window.apiRequest(url);
-        if (!Array.isArray(papers)) {
-            throw new Error("The research feed returned an invalid response.");
+        const existing = collection.get(paper.id);
+        if (existing) {
+            await window.apiRequest(`${endpoint}/${existing.id}`, { method: "DELETE" });
+            collection.delete(paper.id);
+        } else {
+            const result = await window.apiRequest(`${endpoint}/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    article_id: paper.id,
+                    title: paper.title,
+                    authors: paper.authors || [],
+                    summary: window.formatSummaryForStorage(paper),
+                    link: paper.link
+                })
+            });
+            collection.set(paper.id, result);
         }
-        renderCharacters(papers);
-        showFeedError(papers.length ? "" : "No papers were found.");
+        const selected = collection.has(paper.id);
+        button.classList.toggle("is-selected", selected);
+        button.setAttribute("aria-pressed", String(selected));
+        button.setAttribute("aria-label", kind === "like"
+            ? selected ? "Unlike paper" : "Like paper"
+            : selected ? "Remove bookmark" : "Bookmark paper");
+        button.querySelector("img").src = kind === "like"
+            ? selected ? "icons/like2.png" : "icons/like1.png"
+            : selected ? "icons/bookmrk2.png" : "icons/bookmrk1.png";
+        setStatus(selected
+            ? `Added to your ${kind === "like" ? "likes" : "reading list"}.`
+            : `Removed from your ${kind === "like" ? "likes" : "reading list"}.`);
     } catch (error) {
-        showFeedError(error.message);
+        setStatus(error.message, true);
+        if (error.statusCode === 401) {
+            sessionStorage.removeItem("token");
+            window.location.href = "login.html";
+        }
+    } finally {
+        button.disabled = false;
     }
 }
 
-function onCategoryClick(category) {
-    sessionStorage.setItem("category", category);
-    fetchArticles(category);
+function openPaper(paper) {
+    sessionStorage.setItem("selectedPaper", JSON.stringify(paper));
+    window.location.href = "paper.html";
 }
 
-function filterByCategory(category) {
-    sessionStorage.setItem("category", category);
-    const dropdown = document.getElementById("categoryselect");
-    if (dropdown) dropdown.value = category;
-    fetchArticles(category);
+function renderPaper(paper, index) {
+    const card = document.createElement("article");
+    card.className = `paper-card${index === 0 ? " is-lead" : ""}`;
+    const cover = document.createElement("div");
+    cover.className = "card-serial";
+    const serialLabel = document.createElement("span");
+    serialLabel.textContent = "FIELD NOTE";
+    const serialNumber = document.createElement("b");
+    serialNumber.textContent = String(index + 1).padStart(2, "0");
+    cover.append(serialLabel, serialNumber);
+    const content = document.createElement("div");
+    content.className = "card-content";
+    const meta = document.createElement("div");
+    meta.className = "card-meta";
+    const category = document.createElement("span");
+    category.textContent = paper.category || "Research";
+    const date = document.createElement("span");
+    date.textContent = paper.date || "Date unavailable";
+    meta.append(category, date);
+
+    const title = document.createElement("h2");
+    title.textContent = paper.title || "Untitled paper";
+    const authors = document.createElement("p");
+    authors.className = "card-authors";
+    authors.textContent = Array.isArray(paper.authors) && paper.authors.length
+        ? paper.authors.join(", ")
+        : "Authors not listed";
+    const summary = document.createElement("p");
+    summary.className = "card-summary";
+    summary.textContent = window.summaryPresentation(
+        paper.description || "No summary is available.",
+        paper.summary_source
+    ).text;
+    const source = document.createElement("small");
+    source.className = "summary-source";
+    source.textContent = window.summaryPresentation(
+        paper.description,
+        paper.summary_source
+    ).label;
+    const actions = document.createElement("div");
+    actions.className = "card-actions";
+    const like = createActionButton({
+        label: savedLikes.has(paper.id) ? "Unlike paper" : "Like paper",
+        selected: savedLikes.has(paper.id),
+        icon: savedLikes.has(paper.id) ? "icons/like2.png" : "icons/like1.png",
+        kind: "like"
+    });
+    const bookmark = createActionButton({
+        label: savedBookmarks.has(paper.id) ? "Remove bookmark" : "Bookmark paper",
+        selected: savedBookmarks.has(paper.id),
+        icon: savedBookmarks.has(paper.id) ? "icons/bookmrk2.png" : "icons/bookmrk1.png",
+        kind: "bookmark"
+    });
+    like.addEventListener("click", () => toggleSavedPaper(like, paper, savedLikes, "/likes", "like"));
+    bookmark.addEventListener("click", () => toggleSavedPaper(bookmark, paper, savedBookmarks, "/bookmarks", "bookmark"));
+    const read = document.createElement("button");
+    read.type = "button";
+    read.className = "read-paper";
+    read.textContent = "Read the paper ↗";
+    read.addEventListener("click", () => openPaper(paper));
+    actions.append(like, bookmark, read);
+    content.append(meta, title, authors, summary, source, actions);
+    card.append(cover, content);
+    return card;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const dropdown = document.getElementById("categoryselect");
-    const savedCategory = sessionStorage.getItem("category") || "All";
-    if (dropdown) dropdown.value = savedCategory;
-    const searchInput = document.getElementById("searchInput");
-    const savedQuery = sessionStorage.getItem("searchQuery");
-    if (savedQuery && searchInput) {
-        searchInput.value = savedQuery;
-        sessionStorage.removeItem("searchQuery");
-        fetchArticles(savedQuery);
-    } else {
-        fetchArticles(savedCategory);
+async function fetchArticles() {
+    const category = document.getElementById("categoryselect").value;
+    const selectedQuery = Object.prototype.hasOwnProperty.call(searchQueries, category)
+        ? searchQueries[category]
+        : category;
+    const query = activeQuery || selectedQuery || "";
+    const sort = document.getElementById("sortSelect").value;
+    const count = Number(document.getElementById("countSelect").value);
+    const params = new URLSearchParams({
+        query,
+        sort_by: sort,
+        max_results: String(count)
+    });
+    container.replaceChildren();
+    container.setAttribute("aria-busy", "true");
+    resultCount.textContent = "";
+    setStatus("Searching the arXiv index…");
+    try {
+        const papers = await window.apiRequest(`/articles/live?${params}`);
+        if (!Array.isArray(papers)) throw new Error("The research feed returned an invalid response.");
+        savedLikes = new Map();
+        savedBookmarks = new Map();
+        if (sessionStorage.getItem("token")) {
+            try {
+                const [likes, bookmarks] = await Promise.all([
+                    window.apiRequest("/likes/"),
+                    window.apiRequest("/bookmarks/")
+                ]);
+                savedLikes = new Map(likes.map((item) => [item.article_id, item]));
+                savedBookmarks = new Map(bookmarks.map((item) => [item.article_id, item]));
+            } catch (error) {
+                if (error.statusCode === 401) {
+                    setStatus("Your session expired. Sign in again to use your reading list.", true);
+                } else {
+                    setStatus(error.message, true);
+                }
+            }
+        }
+        container.replaceChildren(...papers.map(renderPaper));
+        resultCount.textContent = `${papers.length} ${papers.length === 1 ? "paper" : "papers"}`;
+        if (!papers.length) setStatus("No papers found. Try a broader search or a different field.");
+        else if (!feedMessage.classList.contains("is-error")) setStatus("");
+    } catch (error) {
+        container.replaceChildren();
+        setStatus(error.message, true);
+    } finally {
+        container.setAttribute("aria-busy", "false");
     }
+}
 
-    if (searchInput) {
-        searchInput.addEventListener("keydown", (event) => {
-            if (event.key !== "Enter") return;
-            const query = searchInput.value.trim();
-            if (query) fetchArticles(query);
-        });
-    }
+document.querySelectorAll("nav a[data-category]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+        event.preventDefault();
+        document.getElementById("categoryselect").value = link.dataset.category;
+        activeQuery = "";
+        fetchArticles();
+    });
 });
+
+document.getElementById("searchForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    activeQuery = document.getElementById("searchInput").value.trim();
+    document.getElementById("categoryselect").value = "All";
+    sessionStorage.setItem("searchQuery", activeQuery);
+    fetchArticles();
+});
+
+document.getElementById("categoryselect").addEventListener("change", () => {
+    activeQuery = "";
+    sessionStorage.setItem("category", document.getElementById("categoryselect").value);
+    document.getElementById("searchInput").value = "";
+    sessionStorage.removeItem("searchQuery");
+    fetchArticles();
+});
+document.getElementById("sortSelect").addEventListener("change", fetchArticles);
+document.getElementById("countSelect").addEventListener("change", fetchArticles);
+
+const savedCategory = sessionStorage.getItem("category") || "All";
+document.getElementById("categoryselect").value =
+    Object.prototype.hasOwnProperty.call(searchQueries, savedCategory) ? savedCategory : "All";
+const savedQuery = sessionStorage.getItem("searchQuery");
+if (savedQuery) {
+    activeQuery = savedQuery;
+    document.getElementById("searchInput").value = savedQuery;
+    sessionStorage.removeItem("searchQuery");
+    sessionStorage.removeItem("category");
+}
+fetchArticles();

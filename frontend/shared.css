@@ -1,0 +1,78 @@
+:root {
+    --resight-paper: #f6f1e7;
+    --resight-surface: #fffdf8;
+    --resight-ink: #171916;
+    --resight-muted: #65665e;
+    --resight-line: #d9d2c6;
+    --resight-cobalt: #2856d8;
+    --resight-tomato: #e44a36;
+    --resight-butter: #f2d85b;
+    --resight-forest: #315d46;
+}
+
+body {
+    margin: 0;
+    color: var(--resight-ink);
+    background: var(--resight-paper);
+    font-family: "DM Sans", Inter, Arial, sans-serif;
+}
+
+.site-header {
+    min-height: 78px;
+    padding: 16px clamp(20px, 5vw, 76px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    background: var(--resight-surface);
+    border-bottom: 1px solid var(--resight-line);
+}
+
+.site-header .nav-logo {
+    color: var(--resight-cobalt);
+    font: 700 27px "Playfair Display", Georgia, serif;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-header nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px clamp(12px, 2vw, 30px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    position: static;
+    z-index: auto;
+}
+
+.site-header nav a {
+    color: var(--resight-muted);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .18s ease;
+}
+
+.site-header nav a:hover,
+.site-header nav a:focus-visible,
+.site-header nav a.active { color: var(--resight-cobalt); }
+
+.page-message {
+    max-width: 1200px;
+    margin: 12px auto;
+    padding: 0 24px;
+    color: var(--resight-muted);
+}
+
+.summary-source {
+    color: var(--resight-muted);
+    font-size: 12px;
+    font-style: italic;
+}
+
+@media (max-width: 700px) {
+    .site-header { align-items: flex-start; flex-direction: column; }
+    .site-header nav { gap: 10px 18px; }
+}

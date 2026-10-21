@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 <title>Likes</title>
 
-<link rel="stylesheet" href="likes.css">
+<link rel="stylesheet" href="bookmarks.css">
+<link rel="stylesheet" href="shared.css">
 
 </head>
 
 <body>
 
-<h1 class="likes"> My Likes </h1>
+<div class="issue-ribbon"><span>THE RESEARCH READER</span><span>KEEP THE GOOD THREADS</span><span>YOUR INDEX / 02</span></div>
+<header class="site-header">
+    <a class="nav-logo" href="home.html"><span class="logo-mark" aria-hidden="true">R</span>ReSight<span class="logo-period">.</span></a>
+    <nav aria-label="Main navigation">
+        <a href="home.html">Home</a>
+        <a href="index.html">Research feed</a>
+        <a href="bookmarks.html">Bookmarks</a>
+        <a class="active" href="likes.html">Likes</a>
+        <a href="profile.html">Profile</a>
+    </nav>
+</header>
 
-<div id="likesContainer"></div>
+<main class="library-page">
+    <div class="library-intro"><p class="eyebrow">YOUR PRIVATE INDEX / 02</p><h1 class="likes">Ideas that<br><em>stuck.</em></h1><p>Research you marked as worth another look.</p></div>
+    <label class="library-search-label" for="librarySearch">FILTER YOUR LIKES</label>
+    <input id="librarySearch" class="library-search" type="search" placeholder="Search titles or authors">
+    <p id="libraryMessage" class="page-message" role="status" aria-live="polite"></p>
+    <div id="likesContainer" class="library-grid"></div>
+</main>
 
 <script src="config.js"></script>
 <script src="api.js"></script>

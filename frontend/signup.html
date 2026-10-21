@@ -1,17 +1,27 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account | ReSight</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body class="login-page">
+  <a class="auth-brand" href="home.html">ReSight<span>.</span></a>
 
   <form id="signupForm" class="signup-card">
     
-    <input id="username" type="text" class="login-input" placeholder="Username" required>
-    <input id="email" type="email" class="login-input" placeholder="Email" required>
-    <input id="password" type="password" class="login-input" placeholder="Password" required>
+    <h2>Create your ReSight account</h2>
+    <input id="username" type="text" class="login-input" autocomplete="username" aria-label="Username" placeholder="Username" required>
+    <input id="email" type="email" class="login-input" autocomplete="email" aria-label="Email" placeholder="Email" required>
+    <input id="password" type="password" class="login-input" autocomplete="new-password" aria-label="Password" placeholder="Password (at least 8 characters)" minlength="8" required>
     
     <button type="submit" class="login-btn">Sign Up</button>
-    <p id="message"></p>
+    <p id="message" role="status" aria-live="polite"></p>
     <p class="noacc"> Already have an account? <a href="login.html" class="signup-link">Login</a></p>
   </form>
 <script src="config.js"></script>

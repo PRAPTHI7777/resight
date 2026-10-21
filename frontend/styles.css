@@ -1,326 +1,120 @@
-*{
-    box-sizing:border-box;
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+.paper-page {
+    margin: 0;
+    color: #171916;
+    background: #f6f1e7;
+    font-family: "DM Sans", Arial, sans-serif;
 }
 
-body{
-    font-family:"Inter",Arial,sans-serif;
-    background:#f7f3ef;
-    margin:0;
-    padding:0;
+.paper-page .issue-ribbon {
+    min-height: 30px;
+    padding: 7px clamp(18px, 4vw, 58px);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    background: #171916;
+    color: #f6f1e7;
+    font: 10px "DM Mono", monospace;
+    letter-spacing: .06em;
 }
 
-button:hover{
-    cursor:pointer;
+.paper-page .site-header {
+    min-height: 82px;
+    padding: 14px clamp(18px, 4vw, 58px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    background: #f6f1e7;
+    border-bottom: 1px solid #d9d2c6;
 }
 
-/* ---------------- NAVBAR ---------------- */
+.paper-page .nav-logo { display: inline-flex; align-items: center; color: #171916; font: 800 27px "Playfair Display", Georgia, serif; letter-spacing: -.06em; text-decoration: none; white-space: nowrap; }
+.paper-page .logo-mark { width: 31px; height: 31px; margin-right: 9px; display: inline-grid; place-items: center; background: #2856d8; color: white; font: 700 19px "Playfair Display", Georgia, serif; transform: rotate(-7deg); }
+.paper-page .logo-period { color: #e44a36; }
+.paper-page .site-header nav { display: flex; flex-wrap: wrap; gap: 10px clamp(12px, 2vw, 27px); }
+.paper-page .site-header nav a { color: #171916; font-size: 12px; font-weight: 700; text-decoration: none; }
+.paper-page .site-header nav a:hover { color: #2856d8; }
 
-nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 40px;
-    border-bottom:1px solid #d9d9d9;
-    background:white;
-    position:sticky;
-    top:0;
-    z-index:100;
+.paper-container {
+    max-width: 1000px;
+    margin: 38px auto 82px;
+    padding: 0 clamp(22px, 7vw, 86px);
 }
 
-.nav-logo{
-    font-family:"Playfair Display",serif;
-    color:#8b2d1d;
-    font-size:15px;
+.paper-back { display: inline-block; margin-bottom: 30px; color: #315d46; font: 10px "DM Mono", monospace; text-decoration: none; }
+.paper-back:hover { color: #e44a36; }
+.paper-topic { margin: 0 0 16px; color: #e44a36; font: 10px "DM Mono", monospace; letter-spacing: .13em; text-transform: uppercase; }
+.paper-container h1 { max-width: 900px; margin: 0 0 22px; font: 700 clamp(38px, 6vw, 72px)/1.04 "Playfair Display", Georgia, serif; letter-spacing: -.045em; }
+.paper-meta { display: flex; flex-wrap: wrap; gap: 7px 22px; color: #65665e; font: 11px "DM Mono", monospace; }
+.paper-meta p { margin: 0; line-height: 1.6; }
+.paper-toolbar { margin: 26px 0 32px; padding: 12px 0; display: flex; align-items: center; justify-content: space-between; gap: 15px; border-top: 1px solid #d9d2c6; border-bottom: 1px solid #d9d2c6; }
+.paper-actions { display: flex; gap: 8px; }
+.paper-page .like-btn, .paper-page .bookmark-btn { width: 36px; height: 36px; padding: 7px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d9d2c6; border-radius: 50%; background: transparent; cursor: pointer; }
+.paper-page .like-btn img, .paper-page .bookmark-btn img { width: 20px; height: 20px; object-fit: contain; }
+.paper-page .like-btn:hover, .paper-page .bookmark-btn:hover, .paper-page .like-btn.is-selected, .paper-page .bookmark-btn.is-selected { border-color: #2856d8; background: #e7ecfb; }
+.paper-page .like-btn:focus-visible, .paper-page .bookmark-btn:focus-visible { outline: 3px solid rgb(40 86 216 / 24%); outline-offset: 2px; }
+.original-link { color: #2856d8; font-size: 12px; font-weight: 700; text-decoration: none; }
+.original-link:hover { text-decoration: underline; }
+.paper-summary-block { margin: 0 -25px 48px; padding: clamp(24px, 5vw, 46px); background: #f2d85b; }
+.paper-summary-block .eyebrow, .paper-abstract-block .eyebrow { margin: 0 0 14px; color: #e44a36; font: 10px "DM Mono", monospace; letter-spacing: .13em; }
+.paper-summary-block > p:not(.eyebrow) { max-width: 760px; margin: 0 0 14px; font: 500 clamp(19px, 2.7vw, 27px)/1.55 "Playfair Display", Georgia, serif; }
+.paper-summary-block .summary-source { color: #515044; font: 10px "DM Mono", monospace; }
+.paper-abstract-block { max-width: 790px; padding-bottom: 35px; }
+.paper-abstract-block h2 { margin: 0 0 14px; font: 700 30px "Playfair Display", Georgia, serif; }
+.paper-abstract-block > p:last-child { margin: 0; color: #41423d; font-size: 15px; line-height: 1.9; }
+.related-section { max-width: 1200px; margin: 0 auto; padding: 0 clamp(22px, 5vw, 68px) 75px; }
+.related-section .section-head { margin-bottom: 22px; }
+.related-section .section-head h2 { margin: 0; font: 700 clamp(32px, 4vw, 50px)/1 var(--serif, "Playfair Display", Georgia, serif); }
+.related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.related-paper { min-height: 260px; padding: 21px; display: flex; flex-direction: column; align-items: flex-start; background: #fffdf8; border: 1px solid #d9d2c6; }
+.related-serial { margin-bottom: 20px; color: #315d46; font: 9px "DM Mono", monospace; }
+.related-paper h3 { margin: 0 0 9px; font: 700 24px/1.18 "Playfair Display", Georgia, serif; }
+.related-paper p { margin: 0 0 11px; color: #65665e; font-size: 11px; line-height: 1.6; }
+.related-paper p:nth-of-type(2) { color: #41423d; font-size: 12px; }
+.related-paper .summary-source { margin-top: auto; color: #65665e; font: 9px "DM Mono", monospace; }
+.related-read { margin-top: 12px; border: 0; border-bottom: 1px solid #171916; padding: 4px 0; background: transparent; color: #171916; font-size: 11px; font-weight: 700; cursor: pointer; }
+.related-read:hover { color: #2856d8; }
+.paper-page .page-message { margin: 18px 0 0; padding: 0; color: #a5342b; font-size: 12px; }
+.paper-page .feed-error { grid-column: 1 / -1; color: #65665e; font-size: 13px; line-height: 1.7; }
+.paper-container[aria-busy="true"] { opacity: .7; }
+.paper-page .site-footer { min-height: 90px; padding: 20px clamp(20px, 5vw, 68px); display: flex; align-items: center; justify-content: space-between; gap: 15px; background: #171916; color: #f6f1e7; font: 10px "DM Mono", monospace; }
+.paper-page .site-footer .nav-logo { color: #f6f1e7; }.paper-page .site-footer .logo-period { color: #e44a36; }.paper-page .site-footer a:last-child { color: #f2d85b; text-decoration: none; }
+
+body.login-page { min-height: 100vh; margin: 0; padding: 30px 20px; display: grid; place-items: center; background: #f6f1e7; color: #171916; font-family: "DM Sans", Arial, sans-serif; }
+.login-card, .signup-card { width: min(100%, 470px); position: relative; padding: clamp(26px, 6vw, 48px); display: flex; flex-direction: column; gap: 17px; border: 1px solid #d9d2c6; border-top: 5px solid #2856d8; border-radius: 0; background: #fffdf8; box-shadow: 9px 9px 0 #f2d85b; transform: none; }
+.login-card h2, .signup-card h2 { margin: 0; color: #171916; font: 700 31px/1.18 "Playfair Display", Georgia, serif; }
+.login-card > p, .signup-card > p { color: #65665e; font-size: 13px; line-height: 1.65; }
+.login-input { width: 100%; height: 48px; padding: 0 13px; border: 1px solid #d9d2c6; border-radius: 0; background: white; color: #171916; font: 14px "DM Sans", Arial, sans-serif; }
+.login-input:focus { outline: 3px solid rgb(40 86 216 / 20%); border-color: #2856d8; }
+.login-btn { width: 100%; min-height: 47px; border: 0; border-radius: 0; background: #2856d8; color: white; font: 700 12px "DM Sans", Arial, sans-serif; cursor: pointer; }
+.login-btn:hover { background: #171916; transform: none; }
+.login-btn:disabled { opacity: .65; cursor: wait; }
+.login-options { display: flex; justify-content: flex-end; }
+.forgot-link, .signup-link { color: #2856d8; font-size: 12px; text-decoration: none; }
+.forgot-link:hover, .signup-link:hover { text-decoration: underline; }
+.noacc { color: #65665e; font-size: 12px !important; text-align: center; }
+.login-page #message { min-height: 1em; margin: 0; color: #a5342b; font-size: 12px; }
+.auth-brand { position: fixed; top: 20px; left: 24px; color: #171916; font: 800 23px "Playfair Display", Georgia, serif; letter-spacing: -.05em; text-decoration: none; }
+.auth-brand span { color: #e44a36; }
+
+@media (max-width: 700px) {
+    .paper-page .issue-ribbon span:nth-child(2) { display: none; }
+    .paper-page .site-header { align-items: flex-start; flex-direction: column; }
+    .paper-page .site-header nav { gap: 10px 17px; }
 }
-
-nav ul{
-    display:flex;
-    gap:35px;
-    list-style:none;
+@media (max-width: 560px) {
+    .paper-page .issue-ribbon { font-size: 8px; }
+    .paper-page .site-header nav a { font-size: 11px; }
+    .paper-container { margin: 24px auto 55px; }
+    .paper-toolbar { align-items: flex-start; flex-direction: column; }
+    .paper-summary-block { margin-right: -12px; margin-left: -12px; }
+    .related-grid { grid-template-columns: 1fr; }
+    .paper-page .site-footer { flex-wrap: wrap; }.paper-page .site-footer span { order: 3; width: 100%; }
+    .auth-brand { top: 13px; left: 16px; font-size: 20px; }
+    body.login-page { padding-top: 66px; }
+    .login-card, .signup-card { box-shadow: 6px 6px 0 #f2d85b; }
 }
-
-nav li{
-    cursor:pointer;
-    transition:.3s;
-    font-weight:500;
-}
-
-nav li:hover{
-    color:black;
-}
-
-/* ---------------- FILTER / SEARCH ---------------- */
-
-.dropdown{
-    border:none;
-    border-radius:5px;
-    display:inline;
-}
-
-.category-select{
-    width:auto;
-    min-width:200px;
-    cursor:pointer;
-    padding:10px 18px;
-    background:white;
-    color:#222;
-    border:1px solid #d9d9d9;
-    border-radius:30px;
-    font-size:16px;
-    outline:none;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
-    transition:.2s;
-}
-
-.category-select:focus{
-    border-color:#8b2d1d;
-    box-shadow:0 0 0 3px rgba(139,45,29,.15);
-}
-
-.search-bar{
-    display:flex;
-    height:30px;
-    align-items:center;
-}
-
-.search-input{
-    width:200px;
-    padding:14px 20px;
-    display:flex;
-    align-items:center;
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(30px);
-    -webkit-backdrop-filter:blur(30px);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:30px;
-    color:black;
-    font-size:16px;
-    outline:none;
-    transition:all .3s ease;
-    box-shadow:
-        0 8px 32px rgba(0,0,0,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-.search-input::placeholder{
-    color:black;
-}
-
-.search-input:focus{
-    border-color:white;
-    box-shadow:
-        0 0 20px white,
-        0 8px 32px white;
-}
-
-/* ---------------- LOGIN / SIGNUP PAGE ---------------- */
-
-.login-page{
-    background-image:url("icons/bg4.png");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-    background-attachment:fixed;
-    min-height:100vh;
-    display:flex;
-    justify-content:flex-start;
-    align-items:center;
-    padding:40px 40px 40px 80px;
-    font-family:"Inter",sans-serif;
-    margin:0;
-}
-
-.login-card,
-.signup-card{
-    position:fixed;
-    width:430px;
-    padding:55px 45px;
-    border-radius:30px;
-    background:rgba(20,20,20,.45);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.25);
-    box-shadow:0 15px 35px rgba(0,0,0,.25);
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-    transform:translate(70px,70px);
-}
-
-.login-input{
-    width:auto;
-    border:1px solid #ccc;
-    border-radius:30px;
-    outline:none;
-    height:58px;
-    font-size:17px;
-    padding-left:22px;
-}
-
-.login-btn{
-    width:100%;
-    height:40px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:none;
-    border-radius:30px;
-    background:#007bff;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.login-btn:hover{
-    background:#0056b3;
-    transform:translateY(-2px);
-}
-
-.login-options{
-    display:flex;
-    justify-content:flex-end;
-}
-
-.forgot-link{
-    color:white;
-    text-decoration:none;
-    font-size:14px;
-    transition:.3s;
-}
-
-.forgot-link:hover{
-    color:#ffe5d5;
-}
-
-.signup-link,
-.noacc{
-    font-size:20px;
-    color:white;
-    font-weight:bold;
-    text-align:center;
-}
-
-/* ---------------- PAPER DETAIL PAGE ---------------- */
-
-.paper-container{
-    width:900px;
-    margin:50px auto;
-    background:white;
-    padding:50px;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
-
-#title{
-    font-size:40px;
-    margin-bottom:20px;
-}
-
-.paper-meta{
-    color:gray;
-    line-height:1.8;
-    margin-bottom:30px;
-}
-
-h2{
-    margin-top:35px;
-}
-
-#summary,
-#description{
-    font-size:18px;
-    line-height:1.8;
-    text-align:justify;
-}
-
-#paperLink{
-    display:inline-block;
-    margin-top:30px;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-/* ---------------- BOOKMARKS PAGE ---------------- */
-
-.mybookmarks{
-    justify-content:center;
-    display:flex;
-}
-
-.bookmark-card{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    margin:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,.15);
-}
-
-.bookmark-card h3{
-    margin-bottom:10px;
-}
-
-.bookmark-card p{
-    margin:10px 0;
-}
-
-.bookmark-card a{
-    color:#0066cc;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-.bookmark-card button{
-    margin-top:15px;
-    padding:10px;
-    border:none;
-    background:red;
-    color:white;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-.option-card{
-    background:white;
-    padding:20px;
-    margin:20px;
-    border-radius:15px;
-    cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,.15);
-}
-
-/* ---------------- SHARED CARD ACTIONS (date/category/like/bookmark/read) ---------------- */
-
-.footer-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    grid-column:1 / -1;
-    margin-top:15px;
-    padding-top:15px;
-    border-top:1px solid #eee;
-    width:100%;
-}
-
-.actions-group{
-    display:flex;
-    gap:8px;
-}
-
-.like-btn,
-.bookmark-btn{
-    background:none;
-    border:none;
-    cursor:pointer;
-    padding:2px;
-}
-
-.like-btn:hover,
-.bookmark-btn:hover{
-    background:none;
-}
-
-.read-btn{
-    background-color:transparent;
-    border:none;
-}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

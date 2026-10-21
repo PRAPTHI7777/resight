@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Header
 from html import escape
+import hmac
 import logging
 import requests
 from sqlalchemy.orm import Session
@@ -9,6 +11,7 @@ from database import get_db
 from auth_handler import get_current_user
 from arxiv_service import fetch_papers
 from email_service import send_email
+from config import DIGEST_MANUAL_TOKEN
 
 
 router = APIRouter(
@@ -27,6 +30,19 @@ DIGEST_FIELDS = {
     "Software": "software engineering",
     "Energy Tech": "renewable energy"
 }
+
+
+def _validate_manual_digest_token(manual_token: str | None) -> None:
+    if not DIGEST_MANUAL_TOKEN:
+        raise HTTPException(
+            status_code=503,
+            detail="Manual digest sending is not configured.",
+        )
+    if not manual_token or not hmac.compare_digest(manual_token, DIGEST_MANUAL_TOKEN):
+        raise HTTPException(
+            status_code=403,
+            detail="You are not authorized to send a digest.",
+        )
 
 
 def create_digest_email(papers):
@@ -67,6 +83,11 @@ def create_digest_email(papers):
     """
 
     for paper in papers:
+        summary_source = (
+            "Abstract-based fallback"
+            if paper.get("summary_source") == "abstract_fallback"
+            else "AI-generated summary"
+        )
 
         html += f"""
             <div style="
@@ -105,6 +126,9 @@ def create_digest_email(papers):
                     color: #333;
                 ">
                     {escape(str(paper["description"]))}
+                </p>
+                <p style="color: #777; font-size: 12px; font-style: italic;">
+                    {escape(summary_source)}
                 </p>
 
                 <a href="{escape(str(paper["link"]), quote=True)}"
@@ -146,8 +170,10 @@ def create_digest_email(papers):
 @router.post("/send")
 def send_digest(
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
+    current_user: models.User = Depends(get_current_user),
+    manual_token: str | None = Header(default=None, alias="X-Digest-Token"),
 ):
+    _validate_manual_digest_token(manual_token)
 
     logger.info("Manual digest requested by user id %s.", current_user.id)
     all_papers = []

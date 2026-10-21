@@ -1,135 +1,42 @@
-body{
-    margin:0;
-    padding:0;
-    background:#f7f5f2;
-    font-family:"Inter",sans-serif;
-    color:#222;
-}
-
-.mybookmarks{
-    font-family:"Playfair Display",serif;
-    font-size:52px;
-    text-align:center;
-    margin-top:60px;
-    margin-bottom:50px;
-    color:#2c2c2c;
-}
-
-#bookmarksContainer{
-
-    width:90%;
-    max-width:1400px;
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(380px,1fr));
-
-    gap:35px;
-
-    padding-bottom:60px;
-
-}
-
-.bookmark-card{
-
-    background:white;
-
-    border-radius:20px;
-
-    padding:30px;
-
-    box-shadow:0 8px 22px rgba(0,0,0,.08);
-
-    transition:.25s;
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-.bookmark-card:hover{
-
-    transform:translateY(-6px);
-
-    box-shadow:0 14px 30px rgba(0,0,0,.12);
-
-}
-
-.bookmark-card h2{
-
-    font-family:"Playfair Display",serif;
-
-    font-size:28px;
-
-    margin:0 0 18px;
-
-    color:#222;
-
-}
-
-.bookmark-card p{
-
-    color:#555;
-
-    line-height:1.7;
-
-    margin-bottom:15px;
-
-}
-
-.bookmark-card p:first-of-type{
-
-    color:#8B2E1D;
-
-    font-weight:600;
-
-}
-
-.bookmark-card a{
-
-    margin-top:auto;
-
-    color:#8B2E1D;
-
-    text-decoration:none;
-
-    font-weight:600;
-
-}
-
-.bookmark-card a:hover{
-
-    text-decoration:underline;
-
-}
-
-.bookmark-card button{
-
-    margin-top:20px;
-
-    padding:12px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:#8B2E1D;
-
-    color:white;
-
-    font-size:15px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.bookmark-card button:hover{
-
-    background:#6d2215;
-
-}
+body { margin: 0; color: #171916; background: #f6f1e7; font-family: "DM Sans", Arial, sans-serif; }
+.site-header { min-height: 82px; padding: 14px clamp(18px,4vw,58px); display:flex; align-items:center; justify-content:space-between; gap:22px; background:#f6f1e7; border-bottom:1px solid #d9d2c6; }
+.site-header .nav-logo { display:inline-flex; align-items:center; color:#171916; font:800 27px "Playfair Display",Georgia,serif; letter-spacing:-.06em; text-decoration:none; white-space:nowrap; }
+.site-header .logo-mark { width:31px; height:31px; margin-right:9px; display:inline-grid; place-items:center; background:#2856d8; color:white; font:700 19px "Playfair Display",Georgia,serif; transform:rotate(-7deg); }
+.site-header .logo-period { color:#e44a36; }
+.site-header nav { display:flex; flex-wrap:wrap; gap:10px clamp(12px,2vw,27px); }
+.site-header nav a { color:#171916; font-size:12px; font-weight:700; text-decoration:none; }
+.site-header nav a:hover,.site-header nav a.active { color:#2856d8; }
+.site-header nav { position:static; z-index:auto; padding:0; border:0; background:transparent; }
+.issue-ribbon { min-height:30px; padding:7px clamp(18px,4vw,58px); display:flex; justify-content:space-between; gap:16px; background:#171916; color:#f6f1e7; font:10px "DM Mono",monospace; letter-spacing:.06em; }
+.library-page { max-width:1280px; min-height:calc(100vh - 170px); margin:auto; padding:48px clamp(20px,5vw,68px) 75px; }
+.library-intro { margin-bottom:30px; padding-bottom:25px; display:flex; align-items:end; justify-content:space-between; gap:24px; border-bottom:1px solid #171916; }
+.library-intro .eyebrow { margin:0 0 12px; color:#e44a36; font:10px "DM Mono",monospace; letter-spacing:.12em; }
+.library-intro h1 { margin:0; color:#171916; font:800 clamp(49px,7vw,82px)/.88 "Playfair Display",Georgia,serif; letter-spacing:-.07em; }
+.library-intro h1 em { color:#2856d8; }
+.library-intro > p:last-child { max-width:270px; margin:0 0 5px; color:#65665e; font-size:13px; line-height:1.7; }
+.page-message { min-height:24px; margin:0 0 12px; color:#65665e; font:10px "DM Mono",monospace; }
+.page-message:empty { display:none; }
+.library-search-label { display:block; margin:0 0 7px; color:#65665e; font:9px "DM Mono",monospace; }
+.library-search { width:min(100%,460px); margin-bottom:22px; padding:11px 12px; border:1px solid #d9d2c6; background:#fffdf8; color:#171916; font:12px "DM Sans",Arial,sans-serif; }
+.library-search:focus { outline:3px solid rgb(40 86 216 / 20%); border-color:#2856d8; }
+.library-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.library-card { min-width:0; min-height:300px; padding:22px; display:flex; flex-direction:column; align-items:flex-start; background:#fffdf8; border:1px solid #d9d2c6; }
+.library-card:nth-child(3n+2) { background:#f2d85b; }
+.library-serial { margin-bottom:23px; color:#315d46; font:9px "DM Mono",monospace; letter-spacing:.06em; }
+.library-card h2 { margin:0 0 10px; color:#171916; font:700 clamp(22px,3vw,30px)/1.16 "Playfair Display",Georgia,serif; }
+.library-card p { margin:0 0 12px; color:#65665e; font-size:11px; line-height:1.6; }
+.library-card p:nth-of-type(2) { color:#41423d; font-size:13px; line-height:1.75; }
+.library-card .summary-source { margin-top:auto; color:#65665e; font:9px "DM Mono",monospace; }
+.library-actions { width:100%; margin-top:16px; padding-top:12px; display:flex; align-items:center; flex-wrap:wrap; gap:14px; border-top:1px solid rgb(23 25 22 / 15%); }
+.library-actions a { color:#2856d8; font-size:10px; font-weight:700; text-decoration:none; }
+.library-actions a:hover { text-decoration:underline; }
+.library-open,.library-actions button:not(.library-open) { border:0; border-bottom:1px solid currentColor; padding:5px 0; background:transparent; color:#171916; font-size:10px; font-weight:700; cursor:pointer; }
+.library-actions button:last-child { margin-left:auto; color:#a5342b; }
+.library-open:hover,.library-actions button:hover { color:#2856d8; }
+.library-empty { grid-column:1/-1; min-height:230px; padding:30px; background:#fffdf8; border:1px solid #d9d2c6; }
+.library-empty .eyebrow { margin:0 0 12px; color:#e44a36; font:10px "DM Mono",monospace; }
+.library-empty h2 { margin:0 0 10px; font:700 31px "Playfair Display",Georgia,serif; }
+.library-empty p:not(.eyebrow) { color:#65665e; font-size:13px; line-height:1.7; }
+.library-empty a { color:#2856d8; font-size:11px; font-weight:700; text-decoration:none; }
+.library-empty a:hover { text-decoration:underline; }
+@media(max-width:700px){.site-header{align-items:flex-start;flex-direction:column}.site-header nav{gap:10px 17px}.site-header nav a{font-size:11px}.issue-ribbon span:nth-child(2){display:none}.library-intro{align-items:flex-start;flex-direction:column}.library-intro>p:last-child{max-width:440px}.library-grid{grid-template-columns:1fr}.library-card{min-height:270px}}

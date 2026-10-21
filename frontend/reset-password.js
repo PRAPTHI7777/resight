@@ -21,6 +21,9 @@ resetForm.addEventListener("submit", async (event) => {
         return;
     }
 
+    const submit = resetForm.querySelector("button[type='submit']");
+    submit.disabled = true;
+    submit.textContent = "Updating password...";
     try {
 
         await window.apiRequest("/auth/reset-password", {
@@ -42,6 +45,9 @@ resetForm.addEventListener("submit", async (event) => {
 
         message.textContent = error.message;
 
+    } finally {
+        submit.disabled = false;
+        submit.textContent = "Reset Password";
     }
 
 });

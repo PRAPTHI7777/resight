@@ -1,61 +1,74 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>RESIGHT</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="index.css">
-    </head>
-    <body>
-        <nav>
-
-        <h2 class="nav-logo">R</h2>
-
-        <ul>
-
-            <li onclick="location.href='home.html'">Home</li>
-            <li onclick="filterByCategory('Artificial Intelligence')">Artificial Intelligence</li>
-            <li onclick="filterByCategory('Robotics')">Robotics</li>
-            <li onclick="filterByCategory('Cybersecurity')">Cybersecurity</li>
-            <li onclick="filterByCategory('Quantum Computing')">Quantum</li>
-            <input id="searchInput"  placeholder="Search records..." class="search">
-            <li onclick="location.href='bookmarks.html'">Bookmarks</li>
-            <li onclick="location.href='profile.html'">Profile</li>
-
-        </ul>
-
-    </nav>
-
-    <div class="dropdown">
-    <label for="categories">Filter by categories:</label>
-    <select id="categoryselect" class="category-select" onchange="onCategoryClick(this.value); sessionStorage.setItem('category', this.value);">
-
-    <option value="All">All</option>
-    <option value="Energy Tech">Energy Tech</option>
-    <option value="Robotics">Robotics</option>
-    <option value="Artificial Intelligence">Artificial Intelligence</option>
-    <option value="Software">Software</option>
-    <option value="Cybersecurity">Cybersecurity</option>
-    <option value="Quantum Computing">Quantum Computing</option>
-    </select>
-    </div>
-    <p id="feedMessage" role="status" aria-live="polite"></p>
-       <div class="contain">
-       <div class="container">
-        <div class="picture"></div>
-        <div class="verticalcontain">
-        <div class="title"></div>
-        <div class="authors"></div>
-        <div class="summary"></div>
-        <div class="date"></div>
-        <div class="category"></div>
-         </div>
-       </div>
-      </div>
-      <script src="config.js" defer></script>
-      <script src="api.js" defer></script>
-      <script src="./script.js" defer></script>
-       </body>
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f6f1e7">
+    <title>Explore Research | ReSight</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="feed-page">
+    <div class="issue-ribbon"><span>THE RESEARCH READER</span><span>FOLLOW THE QUESTION</span><span>OPEN INDEX / 01</span></div>
+    <header class="site-header">
+        <a class="nav-logo" href="home.html"><span class="logo-mark" aria-hidden="true">R</span>ReSight<span class="logo-period">.</span></a>
+        <nav aria-label="Main navigation">
+            <a href="home.html">Journal</a>
+            <a class="active" href="index.html">Explore papers</a>
+            <a href="bookmarks.html">Reading list</a>
+            <a href="likes.html">Likes</a>
+            <a href="profile.html">Profile</a>
+        </nav>
+    </header>
+    <main>
+        <section class="feed-intro">
+            <p class="eyebrow">AN OPEN RESEARCH INDEX</p>
+            <div class="feed-title-row"><h1>Follow the<br><em>question.</em></h1><p>Search real arXiv papers by topic. Start with the short version, then follow the source if it catches your eye.</p></div>
+            <form id="searchForm" class="feed-controls" role="search">
+                <label class="feed-search-label" for="searchInput">Search papers</label>
+                <div class="search-field"><input id="searchInput" type="search" placeholder="e.g. language models, ocean sensors, computer vision"><button type="submit">Search <span aria-hidden="true">↗</span></button></div>
+                <div class="feed-filters">
+                    <label>FIELD
+                        <select id="categoryselect" class="category-select">
+                            <option value="All">All fields</option>
+                            <option value="Artificial Intelligence">Artificial intelligence</option>
+                            <option value="Neuroscience">Neuroscience</option>
+                            <option value="Robotics">Robotics</option>
+                            <option value="Computer Vision">Computer vision</option>
+                            <option value="Cybersecurity">Cybersecurity</option>
+                            <option value="Quantum Computing">Quantum computing</option>
+                            <option value="Software">Software</option>
+                            <option value="Energy Tech">Energy technology</option>
+                        </select>
+                    </label>
+                    <label>SORT
+                        <select id="sortSelect">
+                            <option value="relevance">Relevance</option>
+                            <option value="submittedDate">Newest first</option>
+                        </select>
+                    </label>
+                    <label>SHOW
+                        <select id="countSelect">
+                            <option value="5">5 papers</option>
+                            <option value="10" selected>10 papers</option>
+                            <option value="20">20 papers</option>
+                        </select>
+                    </label>
+                </div>
+            </form>
+        </section>
+        <section class="feed-results" aria-label="Research results">
+            <div class="result-heading"><p id="feedMessage" role="status" aria-live="polite">Preparing the research desk…</p><span id="resultCount" class="result-count"></span></div>
+            <div class="contain" aria-busy="false"></div>
+        </section>
+        <section class="feed-bottom-cta"><p class="eyebrow">SAVE A THREAD FOR LATER</p><h2>Good questions<br>are worth keeping.</h2><a href="bookmarks.html">Open your reading list ↗</a></section>
+    </main>
+    <footer class="site-footer"><a class="nav-logo" href="home.html">ReSight<span class="logo-period">.</span></a><span>Research, read with curiosity.</span><a href="home.html">Back to the journal ↗</a></footer>
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>

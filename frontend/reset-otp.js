@@ -13,6 +13,9 @@ otpForm.addEventListener("submit", async (event) => {
         return;
     }
 
+    const submit = otpForm.querySelector("button[type='submit']");
+    submit.disabled = true;
+    submit.textContent = "Verifying...";
     try {
 
         await window.apiRequest("/auth/verify-reset-otp", {
@@ -30,6 +33,9 @@ otpForm.addEventListener("submit", async (event) => {
 
         message.textContent = error.message;
 
+    } finally {
+        submit.disabled = false;
+        submit.textContent = "Verify OTP";
     }
 
 });

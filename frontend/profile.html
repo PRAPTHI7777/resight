@@ -11,43 +11,37 @@
     <title>Profile | Resight</title>
 
     <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="shared.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
 </head>
 
 
 <body>
 
-<nav>
-
-    <h2 class="nav-logo">R</h2>
-
-    <ul>
-
-        <li>Home</li>
-        <li>Artificial Intelligence</li>
-        <li>Robotics</li>
-        <li>Cybersecurity</li>
-        <li>Quantum</li>
-        <li>Bookmarks</li>
-        <li>Profile</li>
-
-    </ul>
-
-</nav>
+<div class="issue-ribbon"><span>THE RESEARCH READER</span><span>YOUR PERSONAL DESK</span><span>PROFILE / 01</span></div>
+<header class="site-header">
+    <a class="nav-logo" href="home.html"><span class="logo-mark" aria-hidden="true">R</span>ReSight<span class="logo-period">.</span></a>
+    <nav aria-label="Main navigation">
+        <a href="home.html">Home</a>
+        <a href="index.html">Research feed</a>
+        <a href="bookmarks.html">Bookmarks</a>
+        <a href="likes.html">Likes</a>
+        <a class="active" href="profile.html">Profile</a>
+    </nav>
+</header>
 
 
-<div class="profile-container">
+<main class="profile-container">
 
     <div class="profile-card">
 
-        <div class="avatar">
-            👤
-        </div>
+        <p class="eyebrow">YOUR RESEARCH DESK</p>
+        <div id="profileInitial" class="avatar" aria-hidden="true">R</div>
 
 
         <h1 id="username">Loading...</h1>
@@ -77,8 +71,6 @@
         </div>
 
 
-        <!-- Subscription -->
-
         <div class="subscription-section">
 
             <h3>Email Digest</h3>
@@ -94,7 +86,7 @@
                 Subscribe
             </button>
 
-        </div>
+        </main>
 
 
         <div class="buttons">
