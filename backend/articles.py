@@ -11,7 +11,7 @@ import requests
 from config import ARTICLE_ADMIN_TOKEN
 from database import get_db
 
-from arxiv_service import fetch_papers
+from arxiv_service import ArxivFeedError, fetch_papers
 
 from gemini_service import generate_summaries
 
@@ -59,8 +59,31 @@ def get_live_articles(
             category=categories.get(query.strip().lower(), "Search Results"),
             sort_by=sort_by,
         )
+    except requests.HTTPError as error:
+        status = error.response.status_code if error.response is not None else "unknown"
+        response_body = error.response.text[:500] if error.response is not None else ""
+        logger.warning(
+            "arXiv HTTP error (%s): %s; response body: %s",
+            status,
+            error,
+            response_body,
+        )
+        raise HTTPException(
+            status_code=502,
+            detail="The arXiv service is temporarily unavailable. Please try again.",
+        ) from error
+    except ArxivFeedError as error:
+        logger.warning("arXiv returned an invalid feed: %s", error)
+        raise HTTPException(
+            status_code=502,
+            detail="The arXiv service returned an invalid response. Please try again.",
+        ) from error
     except requests.RequestException as error:
-        logger.warning("arXiv request failed (%s).", type(error).__name__)
+        logger.warning(
+            "arXiv request failed (%s): %s",
+            type(error).__name__,
+            error,
+        )
         raise HTTPException(
             status_code=502,
             detail="The arXiv service is temporarily unavailable. Please try again.",

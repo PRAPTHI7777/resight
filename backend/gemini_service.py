@@ -75,8 +75,9 @@ Papers:
     except Exception as error:
         logger.warning(
             "Gemini summary request or response validation failed (%s); "
-            "using abstract fallbacks.",
+            "using abstract fallbacks: %s",
             type(error).__name__,
+            error,
         )
         return fallbacks
 
