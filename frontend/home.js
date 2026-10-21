@@ -113,6 +113,25 @@ function renderFeature(paper) {
     actions.appendChild(save);
 }
 
+function renderSecondaryFeature(paper) {
+    const element = document.querySelector(".secondary-feature");
+    element.setAttribute("aria-busy", "false");
+    document.getElementById("secondaryFeatureHeading").textContent =
+        paper.title || "Untitled paper";
+    document.getElementById("secondaryFeatureByline").textContent =
+        `${(paper.authors || []).slice(0, 2).join(", ") || "Authors not listed"} · ${formatPaperDate(paper.date)}`;
+
+    const summaryView = paperSummary(paper);
+    document.getElementById("secondaryFeatureSummary").textContent = summaryView.text;
+    document.getElementById("secondaryFeatureSource").textContent = summaryView.label;
+
+    const actions = document.getElementById("secondaryFeatureActions");
+    actions.replaceChildren(
+        createPaperLink(paper, "Read this paper ↗", "paper-read"),
+        createSaveButton(paper)
+    );
+}
+
 function renderBigIdea(paper) {
     const idea = document.querySelector(".big-idea-copy");
     idea.setAttribute("aria-busy", "false");
@@ -247,6 +266,12 @@ async function loadHomepage() {
                 else showSectionError(document.querySelector(".feature-copy"), "No feature paper was returned. Browse the latest research feed.");
             })
             .catch((error) => showSectionError(document.querySelector(".feature-copy"), error.message)),
+        fetchPapers("robotics", { count: 1 })
+            .then((papers) => {
+                if (papers.length) renderSecondaryFeature(papers[0]);
+                else showSectionError(document.querySelector(".secondary-feature"), "No secondary paper was returned. Browse the live research feed.");
+            })
+            .catch((error) => showSectionError(document.querySelector(".secondary-feature"), error.message)),
         fetchPapers("unexpected", { count: 1 })
             .then((papers) => {
                 if (papers.length) renderSurprise(papers[0]);
