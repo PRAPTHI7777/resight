@@ -1,28 +1,35 @@
-import requests
+import logging
+
 import feedparser
+import requests
 
 from config import ARXIV_TIMEOUT_SECONDS
 from gemini_service import generate_summaries
 
 
+logger = logging.getLogger(__name__)
 BASE_URL = "https://export.arxiv.org/api/query"
+DEFAULT_SEARCH_QUERY = "artificial intelligence"
+
+
+class ArxivFeedError(ValueError):
+    """Raised when arXiv returns a response that is not a valid feed."""
 
 
 def fetch_papers(
-    query: str = "artificial intelligence",
+    query: str | None = DEFAULT_SEARCH_QUERY,
     max_results: int = 10,
     category: str = "Artificial Intelligence",
     sort_by: str = "relevance",
 ):
-
     params = {
         "start": 0,
         "max_results": max_results,
         "sortBy": sort_by,
         "sortOrder": "descending",
     }
-    if query.strip():
-        params["search_query"] = f"all:{query}"
+    search_query = (query or "").strip() or DEFAULT_SEARCH_QUERY
+    params["search_query"] = f"all:{search_query}"
 
     response = requests.get(
         BASE_URL,
@@ -32,7 +39,20 @@ def fetch_papers(
 
     response.raise_for_status()
 
-    feed = feedparser.parse(response.text)
+    try:
+        feed = feedparser.parse(response.text)
+    except Exception as error:
+        logger.exception("Could not parse the arXiv Atom response.")
+        raise ArxivFeedError("arXiv returned an unparseable feed.") from error
+
+    if getattr(feed, "bozo", False) or not feed.get("version"):
+        parse_error = getattr(feed, "bozo_exception", None)
+        logger.error(
+            "arXiv returned an invalid Atom feed (%s): %s",
+            type(parse_error).__name__ if parse_error else "unknown parse error",
+            parse_error or "response did not contain a recognized feed",
+        )
+        raise ArxivFeedError("arXiv returned an invalid Atom feed.") from parse_error
 
     papers = []
 
@@ -53,9 +73,18 @@ def fetch_papers(
         })
 
 
-    # Generate summaries for ALL papers in one Gemini request
-
-    summaries = generate_summaries(papers)
+    try:
+        summaries = generate_summaries(papers)
+    except Exception:
+        logger.exception("Summary generation failed for %d arXiv papers.", len(papers))
+        raise
+    if len(summaries) != len(papers):
+        logger.error(
+            "Summary generation returned %d summaries for %d arXiv papers.",
+            len(summaries),
+            len(papers),
+        )
+        raise RuntimeError("Summary generation returned an incomplete result.")
 
     for paper, summary in zip(papers, summaries):
         paper["description"] = summary["summary"]

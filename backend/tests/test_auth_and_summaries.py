@@ -404,11 +404,23 @@ class SummaryTests(unittest.TestCase):
             patch("arxiv_service.requests.get", return_value=response) as get,
             patch("arxiv_service.generate_summaries", return_value=[]),
         ):
-            arxiv_service.fetch_papers("robotics", category="Robotics")
+            arxiv_service.fetch_papers(
+                "robotics",
+                category="Robotics",
+                sort_by="submittedDate",
+            )
 
         self.assertGreater(get.call_args.kwargs["timeout"], 0)
+        self.assertEqual(
+            get.call_args.kwargs["params"]["search_query"],
+            "all:robotics",
+        )
+        self.assertEqual(
+            get.call_args.kwargs["params"]["sortBy"],
+            "submittedDate",
+        )
 
-    def test_unfiltered_feed_requests_all_arxiv_papers(self):
+    def test_blank_query_uses_a_valid_default_arxiv_search(self):
         response = Mock()
         response.text = '<feed xmlns="http://www.w3.org/2005/Atom"></feed>'
         response.raise_for_status.return_value = None
@@ -418,7 +430,52 @@ class SummaryTests(unittest.TestCase):
         ):
             arxiv_service.fetch_papers("", category="All fields")
 
-        self.assertNotIn("search_query", get.call_args.kwargs["params"])
+        self.assertEqual(
+            get.call_args.kwargs["params"]["search_query"],
+            "all:artificial intelligence",
+        )
+        self.assertEqual(get.call_args.kwargs["params"]["sortBy"], "relevance")
+
+    def test_missing_query_uses_the_default_arxiv_search(self):
+        response = Mock()
+        response.text = '<feed xmlns="http://www.w3.org/2005/Atom"></feed>'
+        response.raise_for_status.return_value = None
+        with (
+            patch("arxiv_service.requests.get", return_value=response) as get,
+            patch("arxiv_service.generate_summaries", return_value=[]),
+        ):
+            arxiv_service.fetch_papers(None)
+
+        self.assertEqual(
+            get.call_args.kwargs["params"]["search_query"],
+            "all:artificial intelligence",
+        )
+
+    def test_invalid_arxiv_feed_is_reported_as_a_gateway_error(self):
+        response = Mock()
+        response.text = "this is not a feed"
+        response.raise_for_status.return_value = None
+        with (
+            patch("arxiv_service.requests.get", return_value=response),
+            patch("arxiv_service.generate_summaries", return_value=[]),
+        ):
+            with self.assertRaises(HTTPException) as error:
+                articles.get_live_articles()
+
+        self.assertEqual(error.exception.status_code, 502)
+
+    def test_arxiv_http_error_logs_the_upstream_response_body(self):
+        response = Mock(status_code=400, text="search_query is required")
+        upstream_error = requests.HTTPError("400 Client Error", response=response)
+        with (
+            patch.object(articles, "fetch_papers", side_effect=upstream_error),
+            self.assertLogs(articles.logger, level="WARNING") as log_output,
+        ):
+            with self.assertRaises(HTTPException) as error:
+                articles.get_live_articles()
+
+        self.assertEqual(error.exception.status_code, 502)
+        self.assertIn("search_query is required", "\n".join(log_output.output))
 
     def test_automated_digest_scheduler_is_disabled_by_default(self):
         scheduler.start_scheduler()
