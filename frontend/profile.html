@@ -37,89 +37,36 @@
 
 
 <main class="profile-container">
-
-    <div class="profile-card">
-
+    <section class="profile-card" aria-labelledby="username">
         <p class="eyebrow">YOUR RESEARCH DESK</p>
         <div id="profileInitial" class="avatar" aria-hidden="true">R</div>
-
-
         <h1 id="username">Loading...</h1>
-
         <p id="email">Loading...</p>
 
-
-        <div class="stats">
-
+        <div class="stats" aria-label="Your saved research">
             <div class="stat">
-
                 <h2 id="bookmarkCount">0</h2>
-
                 <span>Bookmarks</span>
-
             </div>
-
-
             <div class="stat">
-
                 <h2 id="likeCount">0</h2>
-
                 <span>Likes</span>
-
             </div>
-
         </div>
 
+        <section class="subscription-section" aria-labelledby="digestHeading">
+            <h2 id="digestHeading">Email Digest</h2>
+            <p id="subscriptionStatus" role="status" aria-live="polite">Checking subscription...</p>
+            <button id="subscriptionBtn" type="button">Subscribe</button>
+        </section>
 
-        <div class="subscription-section">
-
-            <h3>Email Digest</h3>
-
-            <p id="subscriptionStatus">
-                Checking subscription...
-            </p>
-
-            <button
-                id="subscriptionBtn"
-                type="button"
-            >
-                Subscribe
-            </button>
-
-        </main>
-
-
-        <div class="buttons">
-
-            <button
-                type="button"
-                onclick="location.href='bookmarks.html'"
-            >
-                My Bookmarks
-            </button>
-
-
-            <button
-                type="button"
-                onclick="location.href='likes.html'"
-            >
-                My Likes
-            </button>
-
-
-            <button
-                id="logoutBtn"
-                class="logout"
-                type="button"
-            >
-                Logout
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
+        <nav class="buttons" aria-label="Profile actions">
+            <a class="profile-action" href="bookmarks.html">My Bookmarks</a>
+            <a class="profile-action" href="likes.html">My Likes</a>
+            <button id="logoutBtn" class="logout" type="button">Logout</button>
+        </nav>
+    </section>
+</main>
 
 
 <script src="config.js"></script>

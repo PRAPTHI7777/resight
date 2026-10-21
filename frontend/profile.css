@@ -1,3 +1,4 @@
+*, *::before, *::after { box-sizing:border-box; }
 body { margin:0; color:#171916; background:#f6f1e7; font-family:"DM Sans",Arial,sans-serif; }
 .issue-ribbon { min-height:30px; padding:7px clamp(18px,4vw,58px); display:flex; justify-content:space-between; gap:16px; background:#171916; color:#f6f1e7; font:10px "DM Mono",monospace; letter-spacing:.06em; }
 .site-header { min-height:82px; padding:14px clamp(18px,4vw,58px); display:flex; align-items:center; justify-content:space-between; gap:22px; background:#f6f1e7; border-bottom:1px solid #d9d2c6; }
@@ -18,13 +19,16 @@ body { margin:0; color:#171916; background:#f6f1e7; font-family:"DM Sans",Arial,
 .stat h2 { margin:0; color:#2856d8; font:700 34px "Playfair Display",Georgia,serif; }
 .stat span { color:#65665e; font:10px "DM Mono",monospace; text-transform:uppercase; }
 .subscription-section { margin:0 0 24px; padding:18px 0; border-bottom:1px solid #d9d2c6; text-align:left; }
-.subscription-section h3 { margin:0 0 8px; font:700 22px "Playfair Display",Georgia,serif; }
+.subscription-section h2 { margin:0 0 8px; font:700 22px "Playfair Display",Georgia,serif; }
 .subscription-section p { margin:0 0 14px; color:#65665e; font-size:12px; line-height:1.6; }
 .profile-card button { min-height:42px; padding:0 15px; border:0; background:#2856d8; color:white; font-size:11px; font-weight:700; cursor:pointer; }
 .profile-card button:hover { background:#171916; }
 .profile-card button:disabled { opacity:.6; cursor:wait; }
-.buttons { display:flex; flex-wrap:wrap; gap:10px; }
-.buttons button { min-height:42px; }
-.buttons .logout { margin-left:auto; background:#e44a36; }
+.buttons { margin-top:24px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.buttons .profile-action,
+.buttons button { min-width:0; min-height:44px; padding:0 10px; display:inline-flex; align-items:center; justify-content:center; border:0; background:#2856d8; color:white; font-size:11px; font-weight:700; line-height:1.2; text-align:center; text-decoration:none; cursor:pointer; }
+.buttons .profile-action:hover { background:#171916; }
+.buttons .logout { margin:0; background:#e44a36; }
 .buttons .logout:hover { background:#171916; }
 @media(max-width:700px){.issue-ribbon span:nth-child(2){display:none}.site-header{align-items:flex-start;flex-direction:column}.site-header nav{gap:10px 17px}.site-header nav a{font-size:11px}.profile-container{padding:28px 16px 50px}.profile-card{box-shadow:6px 6px 0 #f2d85b}.stats{gap:35px}}
+@media(max-width:480px){.buttons{grid-template-columns:1fr;gap:9px}.buttons .profile-action,.buttons button{width:100%}}
