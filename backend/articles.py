@@ -1,12 +1,14 @@
-from typing import List
-from fastapi import HTTPException, Depends
+from typing import List, Literal
+from fastapi import HTTPException, Depends, Header, Query
 from sqlalchemy.orm import Session
 from starlette import status
+import hmac
+import logging
 import models
 import schemas
 from fastapi import APIRouter
-import logging
 import requests
+from config import ARTICLE_ADMIN_TOKEN
 from database import get_db
 
 from arxiv_service import fetch_papers
@@ -19,11 +21,32 @@ router = APIRouter(
 )
 logger = logging.getLogger(__name__)
 
+
+def _require_article_admin_token(token: str | None) -> None:
+    if not ARTICLE_ADMIN_TOKEN:
+        raise HTTPException(
+            status_code=503,
+            detail="Article administration is not configured.",
+        )
+    if not token or not hmac.compare_digest(token, ARTICLE_ADMIN_TOKEN):
+        raise HTTPException(
+            status_code=403,
+            detail="You are not authorized to modify articles.",
+        )
+
+
 @router.get("/live")
-def get_live_articles(query: str = "artificial intelligence"):
+def get_live_articles(
+    query: str = "",
+    sort_by: Literal["relevance", "submittedDate"] = "relevance",
+    max_results: int = Query(default=10, ge=1, le=20),
+):
     categories = {
+        "": "All fields",
         "artificial intelligence": "Artificial Intelligence",
+        "neuroscience": "Neuroscience",
         "robotics": "Robotics",
+        "computer vision": "Computer Vision",
         "cybersecurity": "Cybersecurity",
         "quantum computing": "Quantum Computing",
         "software engineering": "Software",
@@ -32,7 +55,9 @@ def get_live_articles(query: str = "artificial intelligence"):
     try:
         return fetch_papers(
             query,
+            max_results=max_results,
             category=categories.get(query.strip().lower(), "Search Results"),
+            sort_by=sort_by,
         )
     except requests.RequestException as error:
         logger.warning("arXiv request failed (%s).", type(error).__name__)
@@ -48,7 +73,12 @@ def get_all(db: Session = Depends(get_db)):
     return articles
 
 @router.post('/',status_code=status.HTTP_201_CREATED,response_model=List[schemas.ArticleResponse])
-def create_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)):
+def create_article(
+    article: schemas.ArticleCreate,
+    db: Session = Depends(get_db),
+    admin_token: str | None = Header(default=None, alias="X-Article-Admin-Token"),
+):
+    _require_article_admin_token(admin_token)
     new_article = models.Article(**article.model_dump())
     db.add(new_article)
     db.commit()
@@ -81,7 +111,12 @@ def get_article(id:int, db: Session = Depends(get_db)):
     return article
 
 @router.delete('/{id}',status_code=status.HTTP_204_NO_CONTENT)
-def delete_article(id:int,db: Session = Depends(get_db)):
+def delete_article(
+    id: int,
+    db: Session = Depends(get_db),
+    admin_token: str | None = Header(default=None, alias="X-Article-Admin-Token"),
+):
+    _require_article_admin_token(admin_token)
     article = db.query(models.Article).filter(models.Article.id == id)
     if not article.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -90,7 +125,13 @@ def delete_article(id:int,db: Session = Depends(get_db)):
     db.commit()
 
 @router.put('/{id}',response_model=schemas.ArticleResponse)
-def update_article(id:int , updated_article: schemas.ArticleCreate, db: Session = Depends(get_db)):
+def update_article(
+    id: int,
+    updated_article: schemas.ArticleCreate,
+    db: Session = Depends(get_db),
+    admin_token: str | None = Header(default=None, alias="X-Article-Admin-Token"),
+):
+   _require_article_admin_token(admin_token)
    article = db.query(models.Article).filter(models.Article.id == id)
    if article.first() is None:
          raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

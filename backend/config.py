@@ -19,6 +19,20 @@ def _required_secret(name: str, minimum_length: int = 1) -> str:
     return value
 
 
+def _optional_secret(name: str, minimum_length: int = 32) -> str:
+    value = os.getenv(name, "").strip()
+    if not value:
+        return ""
+    if len(value) < minimum_length or value.lower().startswith(
+        ("replace_", "change_me", "your_")
+    ):
+        raise RuntimeError(
+            f"{name} must be a non-placeholder value of at least "
+            f"{minimum_length} characters when configured."
+        )
+    return value
+
+
 def _integer_setting(name: str, default: int) -> int:
     try:
         return int(os.getenv(name, str(default)))
@@ -56,6 +70,10 @@ ALLOWED_ORIGINS = tuple(
     ).split(",")
     if origin.strip()
 )
+if "*" in ALLOWED_ORIGINS:
+    raise RuntimeError(
+        "CORS_ALLOWED_ORIGINS must list exact origins; wildcard origins are not allowed."
+    )
 
 DIGEST_SCHEDULER_ENABLED = (
     os.getenv("DIGEST_SCHEDULER_ENABLED", "false").strip().lower()
@@ -67,6 +85,8 @@ if DIGEST_INTERVAL_MINUTES < 1440:
         "DIGEST_INTERVAL_MINUTES must be at least 1440 (one day) "
         "to prevent repeated digest emails."
     )
+DIGEST_MANUAL_TOKEN = _optional_secret("DIGEST_MANUAL_TOKEN")
+ARTICLE_ADMIN_TOKEN = _optional_secret("ARTICLE_ADMIN_TOKEN")
 
 ARXIV_TIMEOUT_SECONDS = _positive_float_setting("ARXIV_TIMEOUT_SECONDS", 15)
 GEMINI_TIMEOUT_MILLISECONDS = _integer_setting("GEMINI_TIMEOUT_MILLISECONDS", 20000)

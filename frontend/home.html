@@ -1,217 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Resight</title>
-
+    <meta name="theme-color" content="#f6f1e7">
+    <title>ReSight — A field guide to what's next</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="home.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 </head>
+<body class="home-page">
+    <div class="issue-ribbon"><span>THE RESEARCH READER</span><span>Curiosity, without the jargon.</span><span>VOL. 01 / OPEN EDITION</span></div>
+    <header class="site-header">
+        <a class="nav-logo" href="home.html" aria-label="ReSight home"><span class="logo-mark" aria-hidden="true">R</span>ReSight<span class="logo-period">.</span></a>
+        <nav aria-label="Main navigation">
+            <a class="active" href="home.html">Journal</a>
+            <a href="index.html">Explore papers</a>
+            <a href="index.html" data-category="Artificial Intelligence">Intelligence</a>
+            <a href="index.html" data-category="Robotics">Robotics</a>
+            <a href="bookmarks.html">Reading list</a>
+            <a href="profile.html">Profile</a>
+        </nav>
+        <a class="header-search" href="index.html" aria-label="Search research">Search <span aria-hidden="true">↗</span></a>
+    </header>
 
-<body>
-
-    <!-- ================= NAVBAR ================= -->
-
-    <nav>
-
-        <h2 class="nav-logo">R</h2>
-
-        <ul>
-
-            <li>Home</li>
-            <li onclick="sessionStorage.setItem('category','Artificial Intelligence'); location.href='index.html';">Artificial Intelligence</li>
-            <li onclick="sessionStorage.setItem('category','Robotics'); location.href='index.html';">Robotics</li>
-            <li onclick="sessionStorage.setItem('category','Cybersecurity'); location.href='index.html';">Cybersecurity</li>
-            <li onclick="sessionStorage.setItem('category','Quantum Computing'); location.href='index.html';">Quantum</li>
-            <li onclick="location.href='bookmarks.html'">Bookmarks</li>
-            <li onclick="location.href='profile.html'">Profile</li>
-
-        </ul>
-
-    </nav>
-
-
-
-    <!-- ================= HERO ================= -->
-
-    <section class="hero">
-
-        <div class="left">
-
-            <div class="hero-image">
-
-                <img src="icons/hero1.jpg" alt="Hero">
-
-                <h1 class="big-title">
-
-                    RESIGHT
-
-                </h1>
-
+    <main>
+        <section class="cover-intro">
+            <div class="cover-kicker"><span class="issue-dot"></span> A field guide to what’s next</div>
+            <div class="cover-grid">
+                <h1>Big ideas.<br><em>Clearer</em> thinking.</h1>
+                <div class="cover-note">
+                    <p>Research is moving fast. ReSight helps you find the papers worth your attention—and understand the idea before the jargon takes over.</p>
+                    <a class="ink-link" href="index.html">Step into the research <span aria-hidden="true">↘</span></a>
+                </div>
             </div>
+            <div class="cover-bottom"><span>SCIENCE / TECHNOLOGY / IDEAS</span><span>Independent curiosity since now</span></div>
+        </section>
 
-            
-
-        </div>
-
-
-
-        <div class="right">
-            <input
-                id="homeSearchInput"
-                class="search"
-                type="text"
-                placeholder=" Search papers...">
-
-            <h2 class="heading">
-
-                Research.<br>
-                Technology.<br>
-                Insight.
-
-            </h2>
-
-            <div class="today-card">
-
-                <h3>NEW TODAY</h3>
-
-                <p>
-
-                    GPT-5 for Scientific Discovery
-
-                </p>
-
-                <button>
-
-                    Read
-
-                </button>
-
+        <section class="feature-spread" aria-labelledby="featureHeading">
+            <div class="feature-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+                <div class="orbit-core"><span>R</span></div>
+                <span class="art-caption">A reading room for the future</span>
+                <span class="feature-index">01</span>
             </div>
+            <article class="feature-copy" aria-busy="true">
+                <div class="section-tag"><span>THE COVER STORY</span><span>01 — FEATURE</span></div>
+                <h2 id="featureHeading">Finding a paper to feature…</h2>
+                <p class="feature-byline">Latest research · arXiv</p>
+                <p class="feature-summary loading-copy">Fetching a real paper from the research feed.</p>
+                <div class="feature-actions"><span class="summary-source"></span></div>
+            </article>
+        </section>
 
-        </div>
+        <section class="fresh-section editorial-section" aria-labelledby="freshHeading">
+            <div class="section-head">
+                <div><p class="eyebrow">THE NEVER-ENDING PRESENT</p><h2 id="freshHeading">Fresh off the feed<span class="red-period">.</span></h2></div>
+                <p class="section-aside">Recently submitted to arXiv.<br>Selected by date, not by hype.</p>
+            </div>
+            <div id="freshPapers" class="fresh-grid" aria-busy="true">
+                <p class="loading-copy">Gathering the latest papers…</p>
+            </div>
+        </section>
 
-    </section>
+        <section class="big-idea-section" aria-labelledby="bigIdeaHeading">
+            <div class="big-idea-label"><span>02</span><span>ONE IDEA, OPENED UP</span></div>
+            <div class="big-idea-copy" aria-busy="true">
+                <p class="eyebrow">THE BIG IDEA</p>
+                <h2 id="bigIdeaHeading">One paper.<br><em>A new perspective.</em></h2>
+                <p class="big-idea-text loading-copy">Finding a recent paper to read more closely…</p>
+                <p class="big-idea-source"></p>
+                <button class="paper-read big-idea-read" type="button" hidden>Read the paper <span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="big-idea-aside"><span class="asterisk">*</span><p>Our plain-language explanation stays close to the paper’s abstract. It’s a starting point for reading—not a substitute for the source.</p></div>
+        </section>
 
+        <section class="topic-section editorial-section" aria-labelledby="topicHeading">
+            <div class="section-head">
+                <div><p class="eyebrow">FOLLOW YOUR QUESTION</p><h2 id="topicHeading">A few doors in<span class="blue-period">.</span></h2></div>
+                <p class="section-aside">Choose a field to see real papers,<br>not a made-up “trending” list.</p>
+            </div>
+            <div class="topic-grid">
+                <a class="topic-tile topic-blue" href="index.html" data-category="Artificial Intelligence"><span class="topic-number">01 / LEARN</span><span class="topic-symbol symbol-ai" aria-hidden="true">⌘</span><h3>Artificial<br>intelligence</h3><span class="topic-go">Explore papers ↗</span></a>
+                <a class="topic-tile topic-yellow" href="index.html" data-category="Neuroscience"><span class="topic-number">02 / THINK</span><span class="topic-symbol symbol-neuro" aria-hidden="true">∿</span><h3>Neuroscience</h3><span class="topic-go">Explore papers ↗</span></a>
+                <a class="topic-tile topic-green" href="index.html" data-category="Robotics"><span class="topic-number">03 / MAKE</span><span class="topic-symbol symbol-robot" aria-hidden="true">↗</span><h3>Robotics</h3><span class="topic-go">Explore papers ↗</span></a>
+                <a class="topic-tile topic-red" href="index.html" data-category="Computer Vision"><span class="topic-number">04 / SEE</span><span class="topic-symbol symbol-vision" aria-hidden="true">◎</span><h3>Computer<br>vision</h3><span class="topic-go">Explore papers ↗</span></a>
+                <a class="topic-tile topic-ivory" href="index.html" data-category="Quantum Computing"><span class="topic-number">05 / COMPUTE</span><span class="topic-symbol symbol-quantum" aria-hidden="true">✳</span><h3>Quantum<br>computing</h3><span class="topic-go">Explore papers ↗</span></a>
+                <a class="topic-tile topic-blue topic-cyber" href="index.html" data-category="Cybersecurity"><span class="topic-number">06 / PROTECT</span><span class="topic-symbol symbol-cyber" aria-hidden="true">⌁</span><h3>Cybersecurity</h3><span class="topic-go">Explore papers ↗</span></a>
+            </div>
+        </section>
 
+        <section class="surprise-section" aria-labelledby="surpriseHeading">
+            <div class="surprise-stamp">A DETOUR<br>WORTH TAKING</div>
+            <div class="surprise-content" aria-busy="true">
+                <p class="eyebrow">WAIT, THAT’S INTERESTING</p>
+                <h2 id="surpriseHeading">The unexpected<br>corner of research.</h2>
+                <p class="surprise-summary loading-copy">Looking for a real paper outside the usual track…</p>
+                <button class="paper-read surprise-read" type="button" hidden>Take the detour <span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="surprise-art" aria-hidden="true"><span class="sun"></span><span class="arc arc-a"></span><span class="arc arc-b"></span><span class="arc arc-c"></span><span class="surprise-label">CURIOSITY<br>IS A METHOD</span></div>
+        </section>
 
-    <!-- ================= FEATURED ================= -->
+        <section class="keep-section editorial-section" aria-labelledby="keepHeading">
+            <div class="section-head">
+                <div><p class="eyebrow">YOUR NEXT TAB</p><h2 id="keepHeading">Keep exploring<span class="green-period">.</span></h2></div>
+                <a class="ink-link" href="index.html">All research topics ↗</a>
+            </div>
+            <div id="keepPapers" class="keep-grid" aria-busy="true"><p class="loading-copy">Finding another thread to follow…</p></div>
+        </section>
 
-    <section class="featured">
+        <section class="closing-note">
+            <p class="eyebrow">MAKE ROOM FOR A NEW IDEA</p>
+            <h2>Read widely.<br><em>Wonder often.</em></h2>
+            <a class="closing-cta" href="index.html">Find your next paper <span aria-hidden="true">↗</span></a>
+            <p class="closing-margin">A better question<br>is a good place to start.</p>
+        </section>
+        <p id="homeMessage" class="page-message" role="status" aria-live="polite"></p>
+    </main>
 
-        <div class="featured-image">
+    <footer class="site-footer"><a class="nav-logo" href="home.html">ReSight<span class="logo-period">.</span></a><span>Research, read with curiosity.</span><a href="index.html">Explore the feed ↗</a></footer>
 
-            IMAGE
-
-        </div>
-
-        <div class="featured-content">
-
-            <h2>
-
-                Attention Is All You Need
-
-            </h2>
-
-            <p class="authors">
-
-                Ashish Vaswani, Noam Shazeer,
-                Niki Parmar...
-
-            </p>
-
-            <p>
-
-                Transformers have revolutionized deep learning by
-                replacing recurrent neural networks with self-attention.
-                This breakthrough laid the foundation for today's
-                large language models.
-
-            </p>
-
-            <button class="readmor">
-
-                Read More →
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ================= SMALL CARDS ================= -->
-
-    <section class="bottom">
-
-        <div class="small-card">
-
-            <h3>
-
-                Artificial Intelligence
-
-            </h3>
-
-            <p>
-
-                Latest research papers.
-
-            </p>
-
-        </div>
-
-        <div class="small-card">
-
-            <h3>
-
-                Robotics
-
-            </h3>
-
-            <p>
-
-                Discover autonomous systems.
-
-            </p>
-
-        </div>
-
-        <div class="small-card">
-
-            <h3>
-
-                Quantum Computing
-
-            </h3>
-
-            <p>
-
-                Explore future computing.
-
-            </p>
-
-        </div>
-
-    </section>
-
-    <script>
-        document.getElementById("homeSearchInput").addEventListener("keydown", (event) => {
-            if (event.key !== "Enter") return;
-            const query = event.currentTarget.value.trim();
-            if (!query) return;
-            sessionStorage.setItem("searchQuery", query);
-            sessionStorage.setItem("category", "All");
-            window.location.href = "index.html";
-        });
-    </script>
-
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="home.js"></script>
 </body>
-
 </html>

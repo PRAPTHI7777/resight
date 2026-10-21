@@ -1,4 +1,5 @@
 import os
+import json
 import sys
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -17,6 +18,7 @@ os.environ["GEMINI_API_KEY"] = ""
 import auth
 import articles
 import arxiv_service
+import digest
 import schemas
 import scheduler
 from fastapi import HTTPException
@@ -73,6 +75,59 @@ def make_user(otp, expiry):
 
 
 class AuthFlowTests(unittest.TestCase):
+    def test_login_issues_token_after_password_verification(self):
+        user = make_user(None, None)
+        db = FakeDatabase(user)
+        with (
+            patch.object(auth, "verify_password", return_value=True),
+            patch.object(auth, "create_access_token", return_value="test-token"),
+        ):
+            result = auth.login(
+                SimpleNamespace(username=user.email, password="correct-password"),
+                db,
+            )
+
+        self.assertEqual(result, {
+            "access_token": "test-token",
+            "token_type": "bearer",
+        })
+
+    def test_login_rejects_unverified_signup(self):
+        user = make_user(
+            "signup:123456",
+            datetime.now(timezone.utc) + timedelta(minutes=2),
+        )
+        db = FakeDatabase(user)
+        with self.assertRaises(HTTPException) as error:
+            auth.login(
+                SimpleNamespace(username=user.email, password="password"),
+                db,
+            )
+        self.assertEqual(error.exception.status_code, 403)
+
+    def test_forgot_password_cooldown_prevents_repeated_email_sends(self):
+        user = make_user(
+            "reset:123456",
+            datetime.now(timezone.utc) + timedelta(minutes=2),
+        )
+        db = FakeDatabase(user)
+
+        with patch.object(auth, "send_otp_email") as send_email:
+            result = auth.forgot_password(
+                schemas.ForgotPasswordRequest(email=user.email),
+                db,
+            )
+
+        self.assertIn("If the email is registered", result["message"])
+        send_email.assert_not_called()
+
+    def test_forgot_password_uses_same_response_for_unknown_email(self):
+        result = auth.forgot_password(
+            schemas.ForgotPasswordRequest(email="unknown@example.test"),
+            FakeDatabase(),
+        )
+        self.assertIn("If the email is registered", result["message"])
+
     def test_password_reset_requires_completed_otp_verification(self):
         user = make_user("reset:123456", datetime.now(timezone.utc) + timedelta(minutes=2))
         db = FakeDatabase(user)
@@ -99,7 +154,27 @@ class AuthFlowTests(unittest.TestCase):
                 db,
             )
         self.assertEqual(error.exception.status_code, 400)
-        self.assertEqual(user.otp, "reset:123456")
+        self.assertEqual(user.otp, "reset:123456:1")
+
+    def test_reset_otp_is_invalidated_after_five_failed_attempts(self):
+        user = make_user(
+            "reset:123456:4",
+            datetime.now(timezone.utc) + timedelta(minutes=2),
+        )
+        db = FakeDatabase(user)
+
+        with self.assertRaises(HTTPException) as error:
+            auth.verify_reset_otp(
+                schemas.ResetOtpVerificationRequest(
+                    email=user.email,
+                    otp="654321",
+                ),
+                db,
+            )
+
+        self.assertEqual(error.exception.status_code, 429)
+        self.assertEqual(user.otp, "reset:locked")
+        self.assertIsNotNone(user.otp_expires_at)
 
     def test_valid_otp_verification_allows_one_password_reset(self):
         expiry = datetime.now(timezone.utc) + timedelta(minutes=2)
@@ -183,6 +258,7 @@ class AuthFlowTests(unittest.TestCase):
             self.assertEqual(result["message"], "Verification code sent")
             sent_otp = send_email.call_args.args[1]
             self.assertTrue(db.user.otp.startswith("signup:"))
+            self.assertNotIn(sent_otp, db.user.otp)
             auth.verify_signup_otp(
                 schemas.ResetOtpVerificationRequest(
                     email=request.email,
@@ -192,6 +268,24 @@ class AuthFlowTests(unittest.TestCase):
             )
 
         self.assertIsNone(db.user.otp)
+
+    def test_password_reset_otp_is_hashed_in_existing_user_field(self):
+        user = make_user(None, None)
+        db = FakeDatabase(user)
+        with patch.object(auth, "send_otp_email") as send_email:
+            result = auth.forgot_password(
+                schemas.ForgotPasswordRequest(email=user.email),
+                db,
+            )
+            otp = send_email.call_args.args[1]
+
+        self.assertIn("If the email is registered", result["message"])
+        self.assertNotIn(otp, user.otp)
+        auth.verify_reset_otp(
+            schemas.ResetOtpVerificationRequest(email=user.email, otp=otp),
+            db,
+        )
+        self.assertEqual(user.otp, "reset-verified")
 
     def test_signup_cleans_up_user_when_verification_email_fails(self):
         db = FakeDatabase()
@@ -221,12 +315,12 @@ class SummaryTests(unittest.TestCase):
         ]
 
     def test_missing_gemini_key_returns_labeled_abstract_fallback(self):
+        self.papers[0]["abstract"] = " ".join(["research"] * 75)
         with patch.dict(os.environ, {"GEMINI_API_KEY": ""}):
             result = generate_summaries(self.papers)
 
         self.assertEqual(result[0]["source"], "abstract_fallback")
-        self.assertIn("Abstract-based fallback:", result[0]["summary"])
-        self.assertIn(self.papers[0]["abstract"], result[0]["summary"])
+        self.assertEqual(len(result[0]["summary"].split()), 60)
 
     def test_malformed_gemini_response_uses_fallback(self):
         client = Mock()
@@ -256,6 +350,45 @@ class SummaryTests(unittest.TestCase):
         self.assertEqual(result[0]["source"], "gemini")
         self.assertEqual(result[1]["source"], "abstract_fallback")
 
+    def test_gemini_summary_is_limited_to_sixty_words(self):
+        client = Mock()
+        summary = " ".join(["insight"] * 75)
+        client.models.generate_content.return_value.text = json.dumps(
+            [{"index": 0, "summary": summary}]
+        )
+        with (
+            patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"}),
+            patch("gemini_service.genai.Client", return_value=client),
+        ):
+            result = generate_summaries(self.papers)
+
+        self.assertEqual(result[0]["source"], "gemini")
+        self.assertEqual(len(result[0]["summary"].split()), 60)
+
+    def test_manual_digest_requires_server_secret_and_matching_header(self):
+        with patch.object(digest, "DIGEST_MANUAL_TOKEN", ""):
+            with self.assertRaises(HTTPException) as error:
+                digest._validate_manual_digest_token("anything")
+        self.assertEqual(error.exception.status_code, 503)
+
+        with patch.object(digest, "DIGEST_MANUAL_TOKEN", "configured-test-token"):
+            with self.assertRaises(HTTPException) as error:
+                digest._validate_manual_digest_token("wrong-token")
+            self.assertEqual(error.exception.status_code, 403)
+            digest._validate_manual_digest_token("configured-test-token")
+
+    def test_article_mutations_require_server_admin_token(self):
+        with patch.object(articles, "ARTICLE_ADMIN_TOKEN", ""):
+            with self.assertRaises(HTTPException) as error:
+                articles._require_article_admin_token("unexpected-token")
+        self.assertEqual(error.exception.status_code, 503)
+
+        with patch.object(articles, "ARTICLE_ADMIN_TOKEN", "configured-test-token"):
+            with self.assertRaises(HTTPException) as error:
+                articles._require_article_admin_token("wrong-token")
+            self.assertEqual(error.exception.status_code, 403)
+            articles._require_article_admin_token("configured-test-token")
+
     def test_arxiv_network_failure_is_reported_as_a_gateway_error(self):
         with patch.object(articles, "fetch_papers", side_effect=requests.Timeout):
             with self.assertRaises(HTTPException) as error:
@@ -274,6 +407,18 @@ class SummaryTests(unittest.TestCase):
             arxiv_service.fetch_papers("robotics", category="Robotics")
 
         self.assertGreater(get.call_args.kwargs["timeout"], 0)
+
+    def test_unfiltered_feed_requests_all_arxiv_papers(self):
+        response = Mock()
+        response.text = '<feed xmlns="http://www.w3.org/2005/Atom"></feed>'
+        response.raise_for_status.return_value = None
+        with (
+            patch("arxiv_service.requests.get", return_value=response) as get,
+            patch("arxiv_service.generate_summaries", return_value=[]),
+        ):
+            arxiv_service.fetch_papers("", category="All fields")
+
+        self.assertNotIn("search_query", get.call_args.kwargs["params"])
 
     def test_automated_digest_scheduler_is_disabled_by_default(self):
         scheduler.start_scheduler()

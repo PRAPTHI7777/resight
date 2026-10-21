@@ -9,7 +9,7 @@ abstract-based summaries when Gemini is unavailable.
 
 - Python 3.10 or later
 - PostgreSQL
-- SMTP credentials for signup verification, password reset, and user-triggered
+- SMTP credentials for signup verification, password reset, and manual
   digests
 - A Gemini API key is optional; without it, the feed displays abstract-based
   fallback summaries
@@ -71,10 +71,24 @@ The automated digest scheduler is **disabled by default**. To opt in, set
 uses a PostgreSQL advisory lock to prevent concurrent sends from multiple API
 workers/instances.
 `POST /digest/send` is a separate, authenticated manual operation and emails
-all subscribed users; do not invoke it as part of tests.
+all subscribed users. It also requires the server-only `X-Digest-Token` header
+matching `DIGEST_MANUAL_TOKEN`; without that optional secret, manual sending is
+disabled. The token must be at least 32 characters. Keep it out of the frontend
+and do not invoke the endpoint as part of tests.
+The article create/update/delete API also requires the server-only
+`X-Article-Admin-Token` header matching `ARTICLE_ADMIN_TOKEN`; those routes are
+disabled when that secret is unset. This token must also be at least 32
+characters.
 
 Signup verification and password-reset verification codes expire after five
-minutes. Email endpoints require working SMTP configuration.
+minutes, and each code is invalidated after five incorrect attempts. Re-sending
+is suppressed while a code is still valid; reset requests return an
+account-neutral response whether or not an email was sent. New codes are stored
+as HMAC-SHA256 digests using `JWT_SECRET_KEY`; unexpired legacy plaintext codes
+remain verifiable during rollout.
+Email endpoints require working SMTP configuration. Configure ingress or
+reverse-proxy rate limits for login and account/email endpoints; the app does
+not rely on a process-local limiter that would be bypassed by multiple workers.
 
 ## Tests
 
