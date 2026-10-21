@@ -25,8 +25,8 @@
     </header>
     <main>
         <section class="feed-intro">
-            <p class="eyebrow">AN OPEN RESEARCH INDEX</p>
-            <div class="feed-title-row"><h1>Follow the<br><em>question.</em></h1><p>Search real arXiv papers by topic. Start with the short version, then follow the source if it catches your eye.</p></div>
+            <p class="eyebrow">THE RESEARCH DESK / OPEN INDEX</p>
+            <div class="feed-title-row"><h1>Follow the<br><em>question.</em></h1><p>A paper can be a doorway: into a new idea, a stubborn problem, or a field you’ve never visited. Start with a short read, then follow the source wherever it leads.</p></div>
             <form id="searchForm" class="feed-controls" role="search">
                 <label class="feed-search-label" for="searchInput">Search papers</label>
                 <div class="search-field"><input id="searchInput" type="search" placeholder="e.g. language models, ocean sensors, computer vision"><button type="submit">Search <span aria-hidden="true">↗</span></button></div>
@@ -62,7 +62,43 @@
         </section>
         <section class="feed-results" aria-label="Research results">
             <div class="result-heading"><p id="feedMessage" role="status" aria-live="polite">Preparing the research desk…</p><span id="resultCount" class="result-count"></span></div>
-            <div class="contain" aria-busy="false"></div>
+            <section id="featuredSection" class="featured-section" aria-label="Featured paper" hidden>
+                <div class="editorial-marker"><span>01</span><span>THE OPENING PAPER</span></div>
+                <div id="featuredPaper" class="featured-paper"></div>
+            </section>
+            <section id="recentSection" class="recent-section" aria-labelledby="recentHeading" hidden>
+                <div class="feed-section-heading">
+                    <div><p class="eyebrow">THE LATEST READING</p><h2 id="recentHeading">Recent papers<span class="tomato-period">.</span></h2></div>
+                    <p>Selected from the papers returned by your current search.</p>
+                </div>
+                <div id="recentPapers" class="contain recent-grid"></div>
+            </section>
+            <section id="whySection" class="why-section" aria-labelledby="whyHeading" hidden>
+                <div class="why-label"><span>02 / A CLOSER LOOK</span><h2 id="whyHeading">Why it matters</h2></div>
+                <div id="whyPaper" class="why-paper"></div>
+            </section>
+            <section class="discovery-section" aria-labelledby="discoveryHeading">
+                <div class="discovery-copy">
+                    <p class="eyebrow">A CHANGE OF SUBJECT</p>
+                    <h2 id="discoveryHeading">Where will<br>curiosity take you?</h2>
+                    <p>Choose a field to find papers from the live arXiv feed.</p>
+                </div>
+                <nav class="discovery-topics" aria-label="Explore research fields">
+                    <a href="index.html" data-category="Artificial Intelligence"><span>01</span>Artificial intelligence <span aria-hidden="true">↗</span></a>
+                    <a href="index.html" data-category="Neuroscience"><span>02</span>Neuroscience <span aria-hidden="true">↗</span></a>
+                    <a href="index.html" data-category="Robotics"><span>03</span>Robotics <span aria-hidden="true">↗</span></a>
+                    <a href="index.html" data-category="Computer Vision"><span>04</span>Computer vision <span aria-hidden="true">↗</span></a>
+                    <a href="index.html" data-category="Cybersecurity"><span>05</span>Cybersecurity <span aria-hidden="true">↗</span></a>
+                    <a href="index.html" data-category="Quantum Computing"><span>06</span>Quantum computing <span aria-hidden="true">↗</span></a>
+                </nav>
+            </section>
+            <section id="moreSection" class="more-section" aria-labelledby="moreHeading" hidden>
+                <div class="feed-section-heading">
+                    <div><p class="eyebrow">KEEP PULLING THE THREAD</p><h2 id="moreHeading">More from the search<span class="cobalt-period">.</span></h2></div>
+                    <p>The remaining papers, left open for a longer read.</p>
+                </div>
+                <div id="morePapers" class="contain more-grid"></div>
+            </section>
         </section>
         <section class="feed-bottom-cta"><p class="eyebrow">SAVE A THREAD FOR LATER</p><h2>Good questions<br>are worth keeping.</h2><a href="bookmarks.html">Open your reading list ↗</a></section>
     </main>

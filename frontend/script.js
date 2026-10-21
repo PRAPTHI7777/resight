@@ -1,4 +1,4 @@
-const container = document.querySelector(".contain");
+const container = document.getElementById("recentPapers");
 const feedMessage = document.getElementById("feedMessage");
 const resultCount = document.getElementById("resultCount");
 const searchQueries = {
@@ -15,6 +15,17 @@ const searchQueries = {
 let savedLikes = new Map();
 let savedBookmarks = new Map();
 let activeQuery = "";
+
+function formatPaperDate(value) {
+    if (!value) return "Date unavailable";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
+}
 
 function setStatus(message, isError = false) {
     feedMessage.textContent = message;
@@ -89,9 +100,9 @@ function openPaper(paper) {
     window.location.href = "paper.html";
 }
 
-function renderPaper(paper, index) {
+function renderPaper(paper, index, variant = "standard") {
     const card = document.createElement("article");
-    card.className = `paper-card${index === 0 ? " is-lead" : ""}`;
+    card.className = `paper-card paper-card-${variant}${index === 0 ? " is-lead" : ""}`;
     const cover = document.createElement("div");
     cover.className = "card-serial";
     const serialLabel = document.createElement("span");
@@ -106,7 +117,7 @@ function renderPaper(paper, index) {
     const category = document.createElement("span");
     category.textContent = paper.category || "Research";
     const date = document.createElement("span");
-    date.textContent = paper.date || "Date unavailable";
+    date.textContent = formatPaperDate(paper.date);
     meta.append(category, date);
 
     const title = document.createElement("h2");
@@ -150,9 +161,51 @@ function renderPaper(paper, index) {
     read.textContent = "Read the paper ↗";
     read.addEventListener("click", () => openPaper(paper));
     actions.append(like, bookmark, read);
+    if (paper.link) {
+        const sourceLink = document.createElement("a");
+        sourceLink.className = "source-paper";
+        sourceLink.href = paper.link;
+        sourceLink.target = "_blank";
+        sourceLink.rel = "noopener noreferrer";
+        sourceLink.textContent = "Source ↗";
+        actions.appendChild(sourceLink);
+    }
     content.append(meta, title, authors, summary, source, actions);
     card.append(cover, content);
     return card;
+}
+
+function renderPaperSections(papers) {
+    const featuredSection = document.getElementById("featuredSection");
+    const recentSection = document.getElementById("recentSection");
+    const whySection = document.getElementById("whySection");
+    const moreSection = document.getElementById("moreSection");
+    const featuredPaper = document.getElementById("featuredPaper");
+    const recentPapers = document.getElementById("recentPapers");
+    const whyPaper = document.getElementById("whyPaper");
+    const morePapers = document.getElementById("morePapers");
+
+    [featuredPaper, recentPapers, whyPaper, morePapers].forEach((element) => {
+        element.replaceChildren();
+    });
+
+    featuredSection.hidden = papers.length === 0;
+    recentSection.hidden = papers.length < 2;
+    whySection.hidden = papers.length < 5;
+    moreSection.hidden = papers.length < 6;
+
+    if (!papers.length) return;
+
+    featuredPaper.appendChild(renderPaper(papers[0], 0, "featured"));
+    papers.slice(1, 4).forEach((paper, offset) => {
+        recentPapers.appendChild(renderPaper(paper, offset + 1, "recent"));
+    });
+    if (papers[4]) {
+        whyPaper.appendChild(renderPaper(papers[4], 4, "why"));
+    }
+    papers.slice(5).forEach((paper, offset) => {
+        morePapers.appendChild(renderPaper(paper, offset + 5, "more"));
+    });
 }
 
 async function fetchArticles() {
@@ -169,6 +222,7 @@ async function fetchArticles() {
         max_results: String(count)
     });
     container.replaceChildren();
+    renderPaperSections([]);
     container.setAttribute("aria-busy", "true");
     resultCount.textContent = "";
     setStatus("Searching the arXiv index…");
@@ -193,7 +247,7 @@ async function fetchArticles() {
                 }
             }
         }
-        container.replaceChildren(...papers.map(renderPaper));
+        renderPaperSections(papers);
         resultCount.textContent = `${papers.length} ${papers.length === 1 ? "paper" : "papers"}`;
         if (!papers.length) setStatus("No papers found. Try a broader search or a different field.");
         else if (!feedMessage.classList.contains("is-error")) setStatus("");
@@ -205,7 +259,7 @@ async function fetchArticles() {
     }
 }
 
-document.querySelectorAll("nav a[data-category]").forEach((link) => {
+document.querySelectorAll("[data-category]").forEach((link) => {
     link.addEventListener("click", (event) => {
         event.preventDefault();
         document.getElementById("categoryselect").value = link.dataset.category;
