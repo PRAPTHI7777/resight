@@ -1,10 +1,28 @@
 import os
+import logging
 from pathlib import Path
 
 from dotenv import load_dotenv
 
 
-load_dotenv(Path(__file__).with_name(".env"))
+logger = logging.getLogger(__name__)
+ENV_FILE = Path(__file__).with_name(".env")
+GEMINI_API_KEY_ENV_NAME = "GEMINI_API_KEY"
+GEMINI_API_KEY_PREEXISTED_DOTENV = GEMINI_API_KEY_ENV_NAME in os.environ
+load_dotenv(ENV_FILE)
+GEMINI_API_KEY_SOURCE = (
+    "process_environment"
+    if GEMINI_API_KEY_PREEXISTED_DOTENV
+    else "backend/.env"
+    if os.getenv(GEMINI_API_KEY_ENV_NAME)
+    else "unset"
+)
+if GEMINI_API_KEY_PREEXISTED_DOTENV:
+    logger.warning(
+        "%s was already set before loading backend/.env; dotenv does not "
+        "override existing process environment values.",
+        GEMINI_API_KEY_ENV_NAME,
+    )
 
 
 def _required_secret(name: str, minimum_length: int = 1) -> str:

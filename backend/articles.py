@@ -1,9 +1,10 @@
-from typing import List, Literal
-from fastapi import HTTPException, Depends, Header, Query
+from typing import Annotated, List, Literal
+from fastapi import HTTPException, Depends, Header, Path, Query
 from sqlalchemy.orm import Session
 from starlette import status
 import hmac
 import logging
+import time
 import models
 import schemas
 from fastapi import APIRouter
@@ -37,10 +38,11 @@ def _require_article_admin_token(token: str | None) -> None:
 
 @router.get("/live")
 def get_live_articles(
-    query: str = "",
+    query: Annotated[str, Query(max_length=256)] = "",
     sort_by: Literal["relevance", "submittedDate"] = "relevance",
     max_results: int = Query(default=10, ge=1, le=20),
 ):
+    request_started_at = time.perf_counter()
     categories = {
         "": "All fields",
         "artificial intelligence": "Artificial Intelligence",
@@ -69,7 +71,7 @@ def get_live_articles(
             response_body,
         )
         raise HTTPException(
-            status_code=502,
+            status_code=503 if status in (429, 503) else 502,
             detail="The arXiv service is temporarily unavailable. Please try again.",
         ) from error
     except ArxivFeedError as error:
@@ -88,6 +90,11 @@ def get_live_articles(
             status_code=502,
             detail="The arXiv service is temporarily unavailable. Please try again.",
         ) from error
+    finally:
+        logger.info(
+            "articles.live stage=end_to_end duration_ms=%.3f",
+            (time.perf_counter() - request_started_at) * 1000,
+        )
 
 
 @router.get('/',response_model=List[schemas.ArticleResponse])
@@ -110,7 +117,10 @@ def create_article(
 
 
 @router.get("/test-gemini")
-def test_gemini():
+def test_gemini(
+    admin_token: str | None = Header(default=None, alias="X-Article-Admin-Token"),
+):
+    _require_article_admin_token(admin_token)
 
     result = generate_summaries([{
         "title": "Artificial Intelligence",
@@ -126,7 +136,7 @@ def test_gemini():
     }
 
 @router.get('/{id}',response_model=schemas.ArticleResponse)
-def get_article(id:int, db: Session = Depends(get_db)):
+def get_article(id: Annotated[int, Path(ge=1)], db: Session = Depends(get_db)):
     article = db.query(models.Article).filter(models.Article.id == id).first()
     if not article:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -135,7 +145,7 @@ def get_article(id:int, db: Session = Depends(get_db)):
 
 @router.delete('/{id}',status_code=status.HTTP_204_NO_CONTENT)
 def delete_article(
-    id: int,
+    id: Annotated[int, Path(ge=1)],
     db: Session = Depends(get_db),
     admin_token: str | None = Header(default=None, alias="X-Article-Admin-Token"),
 ):
@@ -149,7 +159,7 @@ def delete_article(
 
 @router.put('/{id}',response_model=schemas.ArticleResponse)
 def update_article(
-    id: int,
+    id: Annotated[int, Path(ge=1)],
     updated_article: schemas.ArticleCreate,
     db: Session = Depends(get_db),
     admin_token: str | None = Header(default=None, alias="X-Article-Admin-Token"),

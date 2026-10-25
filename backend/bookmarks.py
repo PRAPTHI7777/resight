@@ -20,7 +20,7 @@ def add_bookmark(
         models.Bookmark.article_id==Bookmark.article_id).first()
     if existing:
         raise HTTPException(
-            status_code=400,
+            status_code=409,
             detail="Bookmark already exists"
         )
     new_bookmark=models.Bookmark(

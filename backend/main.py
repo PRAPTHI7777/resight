@@ -2,8 +2,9 @@ from contextlib import asynccontextmanager
 import logging
 from collections.abc import AsyncGenerator
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 import users
 from database import Base, engine
 import articles
@@ -18,6 +19,28 @@ from sqlalchemy.exc import SQLAlchemyError
 
 
 logger = logging.getLogger(__name__)
+
+
+def _configure_timing_loggers() -> None:
+    uvicorn_logger = logging.getLogger("uvicorn")
+    handlers = uvicorn_logger.handlers
+    if not handlers:
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(
+            logging.Formatter("%(levelname)s %(name)s: %(message)s")
+        )
+        handlers = [console_handler]
+
+    for logger_name in ("articles", "arxiv_service"):
+        timing_logger = logging.getLogger(logger_name)
+        timing_logger.setLevel(logging.INFO)
+        timing_logger.propagate = False
+        for handler in handlers:
+            if handler not in timing_logger.handlers:
+                timing_logger.addHandler(handler)
+
+
+_configure_timing_loggers()
 
 
 @asynccontextmanager
@@ -43,6 +66,21 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+@app.exception_handler(SQLAlchemyError)
+async def handle_database_error(request: Request, error: SQLAlchemyError):
+    logger.error(
+        "Database operation failed (%s) while handling %s %s.",
+        type(error).__name__,
+        request.method,
+        request.url.path,
+    )
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "A database operation failed. Please try again."},
+    )
+
 
 app.add_middleware(
     CORSMiddleware,

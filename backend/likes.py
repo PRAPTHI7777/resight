@@ -20,7 +20,7 @@ def add_like(
         models.Like.article_id==Like.article_id).first()
     if existing:
         raise HTTPException(
-            status_code=400,
+            status_code=409,
             detail="Like already exists"
         )
     new_like=models.Like(

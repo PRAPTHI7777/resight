@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 import models
 from database import get_db
 from auth_handler import get_current_user
-from arxiv_service import fetch_papers
+from arxiv_service import ArxivFeedError, fetch_papers
 from email_service import send_email
 from config import DIGEST_MANUAL_TOKEN
 
@@ -187,7 +187,7 @@ def send_digest(
                 paper["category"] = category
 
             all_papers.extend(papers)
-    except requests.RequestException as error:
+    except (requests.RequestException, ArxivFeedError) as error:
         logger.warning("arXiv digest fetch failed (%s).", type(error).__name__)
         raise HTTPException(
             status_code=502,
