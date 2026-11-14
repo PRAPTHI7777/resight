@@ -17,6 +17,7 @@ os.environ["JWT_SECRET_KEY"] = "unit-test-key-with-more-than-thirty-two-characte
 os.environ["DIGEST_SCHEDULER_ENABLED"] = "false"
 os.environ["DIGEST_INTERVAL_MINUTES"] = "1440"
 os.environ["GEMINI_API_KEY"] = ""
+os.environ["CORS_ALLOWED_ORIGINS"] = "https://teal-belekoy-21ea97.netlify.app"
 
 import auth
 import articles
@@ -823,10 +824,26 @@ class SummaryTests(unittest.TestCase):
 
 class ApiReliabilityTests(unittest.TestCase):
     def setUp(self):
-        self.client = TestClient(main.app)
+        self.client = TestClient(main.app, raise_server_exceptions=False)
 
     def tearDown(self):
-        main.app.dependency_overrides.clear()
+        main.fastapi_app.dependency_overrides.clear()
+
+    def test_unhandled_server_error_includes_cors_headers(self):
+        @main.fastapi_app.get("/_test/unhandled-error")
+        def unhandled_error():
+            raise RuntimeError("intentional test failure")
+
+        response = self.client.get(
+            "/_test/unhandled-error",
+            headers={"Origin": "https://teal-belekoy-21ea97.netlify.app"},
+        )
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(
+            response.headers.get("access-control-allow-origin"),
+            "https://teal-belekoy-21ea97.netlify.app",
+        )
 
     def test_private_read_endpoints_require_authentication(self):
         for endpoint in ("/likes/", "/bookmarks/", "/users/me"):
@@ -869,7 +886,7 @@ class ApiReliabilityTests(unittest.TestCase):
         def failing_database():
             yield FailingDatabase()
 
-        main.app.dependency_overrides[database.get_db] = failing_database
+        main.fastapi_app.dependency_overrides[database.get_db] = failing_database
         response = self.client.get("/articles/")
 
         self.assertEqual(response.status_code, 503)

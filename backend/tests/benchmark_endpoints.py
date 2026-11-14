@@ -144,7 +144,7 @@ def main_benchmark():
         finally:
             db.close()
 
-    main.app.dependency_overrides[database.get_db] = override_db
+    main.fastapi_app.dependency_overrides[database.get_db] = override_db
     client = TestClient(main.app)
     results = [
         _benchmark(client, "empty article list", "/articles/"),
@@ -347,7 +347,7 @@ def main_benchmark():
             indent=2,
         )
     )
-    main.app.dependency_overrides.clear()
+    main.fastapi_app.dependency_overrides.clear()
     test_engine.dispose()
 
 
