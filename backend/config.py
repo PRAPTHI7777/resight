@@ -110,8 +110,3 @@ ARXIV_TIMEOUT_SECONDS = _positive_float_setting("ARXIV_TIMEOUT_SECONDS", 15)
 GEMINI_TIMEOUT_MILLISECONDS = _integer_setting("GEMINI_TIMEOUT_MILLISECONDS", 20000)
 if GEMINI_TIMEOUT_MILLISECONDS <= 0:
     raise RuntimeError("GEMINI_TIMEOUT_MILLISECONDS must be greater than zero.")
-SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = _integer_setting("SMTP_PORT", 587)
-if not 1 <= SMTP_PORT <= 65535:
-    raise RuntimeError("SMTP_PORT must be between 1 and 65535.")
-SMTP_TIMEOUT_SECONDS = _positive_float_setting("SMTP_TIMEOUT_SECONDS", 10)
